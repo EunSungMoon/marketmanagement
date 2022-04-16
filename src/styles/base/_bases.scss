@@ -1,0 +1,116 @@
+body {
+  background-color: $main-color;
+  font-family: "NanumSquareBold";
+  color: $black-color;
+  main {
+    min-height: 78.5vh;
+  }
+}
+
+.blind {
+  position: absolute;
+  font-size: 5px;
+  width: 0;
+  clip: rect(0 0 0 0);
+  overflow: hidden;
+}
+.displayNo {
+  display: none;
+}
+.backColor {
+  &-w {
+    background-color: $white-color;
+  }
+  &-o {
+    background-color: $main-color;
+  }
+  &-g {
+    background-color: $gray-color;
+  }
+}
+.font {
+  &-dg {
+    color: $deepgray-color;
+  }
+  &-r {
+    color: $red-color;
+  }
+  &-b {
+    color: $black-color;
+  }
+}
+.w {
+  &-70 {
+    width: 70%;
+  }
+}
+
+.marginAuto {
+  margin: 0 auto;
+}
+.txtDeco {
+  &-o {
+    @include aTag($main-color);
+    &:hover {
+      color: inherit;
+    }
+  }
+  &-w {
+    @include aTag($white-color);
+    &:hover {
+      color: inherit;
+    }
+  }
+  &-g {
+    @include aTag($deepgray-color);
+  }
+}
+.word-break {
+  word-break: keep-all;
+}
+.white-space {
+  white-space: nowrap;
+}
+
+/**********************************************************
+
+반응형
+
+***********************************************************/
+@media (min-width: 250px) {
+  body {
+    font-size: 12px;
+    .h2 {
+      font-size: 14px;
+    }
+  }
+  .label-ratio {
+    width: 30%;
+  }
+  .conditionLabel-ratio {
+    width: 22.5%;
+  }
+  .w-ratio {
+    width: 100%;
+  }
+}
+
+@include media-breakpoint-up(md) {
+  .label-ratio {
+    width: 28.3%;
+  }
+  .conditionLabel-ratio {
+    width: 22.3%;
+  }
+  .w-ratio {
+    width: 80%;
+  }
+}
+@include media-breakpoint-up(lg) {
+  body {
+    font-size: 18px;
+    .h2 {
+      font-size: 20px;
+    }
+  }
+}

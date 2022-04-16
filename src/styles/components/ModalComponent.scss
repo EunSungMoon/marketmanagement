@@ -1,0 +1,14 @@
+.modal {
+  .closeModal {
+    border-color: $main-color;
+    &:hover {
+      background-color: $main-color;
+      border-color: $main-color;
+    }
+  }
+}
+.btn-close {
+  &:focus {
+    box-shadow: none;
+  }
+}

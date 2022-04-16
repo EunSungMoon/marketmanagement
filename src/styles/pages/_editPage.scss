@@ -1,0 +1,193 @@
+// enrollMain : 등록하기 페이지
+// confirmMain : 확인완료 페이지
+// updateMain : 등록완료 페이지
+
+// mainWrap : 등록하기, 갱신하기, 확인완료 페이지 공통 디자인
+.mainWrap {
+  @include display(flex-start, center);
+  flex-flow: column;
+  width: 87%;
+  .button {
+    @include display(center, center);
+    margin: 0 auto;
+    margin-top: 6%;
+    border: none;
+    border-radius: 7px;
+    color: $main-color;
+  }
+  .dday-input {
+    width: 100%;
+    border: none;
+    outline: none;
+    background-color: $white-color;
+    color: $black-color;
+    &::placeholder {
+      color: $gray-color;
+    }
+  }
+  .updateBtnWrap {
+    @include display(center, center);
+    margin-top: 4.5%;
+  }
+  .halfWidth {
+    width: 49%;
+  }
+  .quaterWidth {
+    width: 38.5%;
+  }
+  .input-flex {
+    @include display(flex-start, center);
+  }
+  .inputWrap {
+    margin-bottom: 1.5%;
+    outline: none;
+  }
+  .input {
+    border: none;
+    outline: none;
+    &::placeholder {
+      color: $gray-color;
+    }
+  }
+  table {
+    tbody {
+      tr {
+        height: 36px;
+      }
+    }
+  }
+  .position {
+    position: relative;
+  }
+  .clearBtn {
+    background: none;
+    border: none;
+    position: absolute;
+    right: 1%;
+    padding: 0;
+    padding-left: 1px;
+    &:hover {
+      background: $gray-color;
+      border-radius: 15px;
+      width: 20px;
+      height: 20px;
+    }
+  }
+}
+
+// 확인완료 페이지
+#confirmMain {
+  .qrImg {
+    @include display(center, center);
+    .margin-right20 {
+      margin-right: 20px;
+    }
+  }
+}
+
+// 갱신하기 페이지
+#updateMain {
+  .grayBtn {
+    border: 2px solid $deepgray-color;
+    background: $white-color;
+    border-radius: 7px;
+    padding: 5px;
+    color: $deepgray-color;
+    text-align: center;
+  }
+  .active {
+    color: $main-color;
+    border-color: $main-color;
+  }
+  .openDateInput {
+    background: $white-color;
+    border: none;
+    margin-bottom: 6px;
+  }
+  .delteBtn {
+    margin-left: 20px;
+  }
+}
+
+/**********************************************************
+
+반응형
+
+***********************************************************/
+@media (min-width: 250px) {
+  #updateMain {
+    .grayBtn {
+      width: 50px;
+      margin-bottom: 5px;
+      height: 23px;
+      line-height: 10px;
+      margin-right: 6px;
+    }
+  }
+  .mainWrap {
+    margin-top: 18px;
+    margin-bottom: 19.5px;
+    .button {
+      width: 87px;
+      height: 30px;
+    }
+    .whiteBox {
+      border-radius: 20px;
+      padding: 9px;
+    }
+    .grayBox {
+      border-radius: 12px;
+      padding: 6px;
+    }
+    .input {
+      height: 20px;
+    }
+    .dday-input {
+      height: 20px;
+    }
+    .clearBtn{
+      margin-top: 0;
+      svg{
+        vertical-align: middle;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  #updateMain {
+    .grayBtn {
+      width: 70px;
+      margin-right: 10px;
+      margin-bottom: 0;
+      height: initial;
+      line-height: initial;
+    }
+  }
+  .mainWrap {
+    margin-top: 36px;
+    margin-bottom: 36px;
+    .button {
+      width: 130px;
+      height: 45px;
+    }
+    .whiteBox {
+      padding: 25px 18px;
+    }
+    .grayBox {
+      padding: 20px;
+    }
+    .input {
+      height: 28px;
+    }
+    .dday-input {
+      height: 28px;
+    }
+    .clearBtn{
+      margin-top: 4px;
+      svg{
+        vertical-align: baseline;
+      }
+    }
+  }
+}

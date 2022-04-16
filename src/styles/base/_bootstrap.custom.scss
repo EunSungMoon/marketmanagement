@@ -1,0 +1,12 @@
+.mainColor {
+  color: $main-color !important;
+  border-color: $main-color !important;
+}
+.container-fluid {
+  padding: 0;
+}
+@media (min-width: 1400px) {
+  .container {
+    max-width: 1400px;
+  }
+}

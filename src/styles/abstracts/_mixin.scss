@@ -1,0 +1,10 @@
+@mixin display($justify, $align) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+}
+
+@mixin aTag($color){
+  text-decoration: none;
+  color: $color;
+}

@@ -1,0 +1,61 @@
+@import "~bootstrap/scss/functions";
+@import "~bootstrap/scss/variables";
+@import "~bootstrap/scss/mixins";
+
+#header {
+  .logoArea {
+    position: relative;
+  }
+  .formWrap {
+    @include display(flex-end, center);
+    padding-left: 9px;
+    .form {
+      @include display(center, center);
+      .inputWrap {
+        position: relative;
+        width: 186px;
+        height: 34px;
+        .searchInput {
+          background: none;
+          border: none;
+          width: 100%;
+          height: 100%;
+          padding-right: 20%;
+          outline: none;
+          &::placeholder {
+            color: $white-color;
+            text-align: right;
+          }
+        }
+        .searchBtn {
+          border: none;
+          color: $white-color;
+          background: none;
+          position: absolute;
+          top: -1px;
+          right: 0px;
+          font-size: 24px;
+        }
+      }
+      .enrollBtn {
+        width: 110px;
+        height: 34px;
+        border-radius: 12px;
+        border: 2px solid $main-color;
+        color: $main-color;
+      }
+    }
+  }
+  .margin-percent {
+    margin-right: 4.5%;
+  }
+}
+
+#noUserHeader {
+  .headerImg{
+    background: url('../images/longheader.png');
+    background-repeat: repeat-x;
+    background-size: contain;
+    height: 50px;
+  }
+}

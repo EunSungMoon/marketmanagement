@@ -1,0 +1,90 @@
+// 메인 페이지, 검색 후 결과 페이지 table
+#board {
+  .arrow {
+    width: 100%;
+    height: 23px;
+  }
+  .activeArrow {
+    transform-origin: 30%;
+    transform: rotate(270deg);
+  }
+  .customTable {
+    border-radius: 12px;
+  }
+  table {
+    th {
+      font-size: 24px;
+      padding: 25px 18px 17px;
+    }
+    th,td{
+      font-family: 'NanumSquareBold';
+      color: $black-color;
+    }
+    .productName{
+      width: 44%;
+    }
+    .totalProduct{
+      width: 14%;
+    }
+    .dateProduct{
+      width: 18%;
+    }
+  }
+  .locationTitle{
+    color:$white-color;
+    font-size: 20px;
+    margin-bottom: 0;
+  }
+  .red{
+    color: $red-color;
+  }
+  .export{
+    border: 2px solid $gray-color;
+    color: $deepgray-color;
+    border-radius: 7px;
+    margin-left: 7px;
+    outline: none;
+    &:hover{
+      background: $gray-color; 
+    }
+  }
+  .flex-start{
+    @include display(flex-start, center);
+    margin-bottom: 7px;
+  }
+  .goToMap{
+    text-decoration: underline;
+    color: #0d6efd;
+    cursor: pointer;
+  }
+}
+/**********************************************************
+
+반응형
+
+***********************************************************/
+@media (min-width: 250px) {
+  #board {
+    margin-top: 18px;
+    margin-bottom: 19.5px;
+    table {
+      th,
+      td {
+        font-size: 14px;
+      }
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  #board {
+    margin-top: 36px;
+    margin-bottom: 36px;
+    table {
+      th,
+      td {
+        font-size: 16px;
+      }
+    }
+  }
+}
