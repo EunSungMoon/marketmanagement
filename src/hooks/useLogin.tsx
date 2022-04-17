@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
-import { useNavigate } from 'react-router';
 
 export interface validateValues {
   username: string;
@@ -17,7 +16,6 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
   const [values, setValues] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<AxiosError>();
-  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -45,8 +43,8 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
         },
       );
       if (loadAxios.status === 200) {
-        localStorage.setItem('token', loadAxios.data.token);
-        navigate('/main');
+        sessionStorage.setItem('token', loadAxios.data.token);
+        window.location.replace('/main');
       }
     } catch (error: any) {
       setError(error);
@@ -54,7 +52,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     // document.location.href = '/'
   };
 

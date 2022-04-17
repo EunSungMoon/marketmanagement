@@ -47,7 +47,7 @@ export default function Header() {
             <Link to={{ pathname: `/` }}>
               <h1 className="logoArea">
                 <img src={logo} alt="로고" />
-                <span className="blind">재고관리</span>
+                <span className="blind">채미왔소</span>
               </h1>
             </Link>
             <div className="formWrap">
@@ -62,7 +62,6 @@ export default function Header() {
                     name="name"
                     className="searchInput"
                     aria-label="Search"
-                    placeholder="검색"
                     onChange={handleSearchChange}
                     onKeyDown={handleKey}
                     autoComplete="off"

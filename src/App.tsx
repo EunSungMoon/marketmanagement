@@ -12,11 +12,11 @@ function App() {
     <BrowserRouter>
       <div className="App">
         <div className="container-fluid">
-          {localStorage.token ? <Header /> : <NoUserHeader />}
+          {sessionStorage.token ? <Header /> : <NoUserHeader />}
           <Routes>
             <Route path="/" element={<Login />} />
             <Route path="/signup" element={<Signup />} />
-            {localStorage.token ? <Route path="/main" element={<Main />} /> : null}
+            {sessionStorage.token ? <Route path="/main" element={<Main />} /> : null}
           </Routes>
         </div>
       </div>

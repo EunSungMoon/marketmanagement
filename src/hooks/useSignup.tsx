@@ -49,7 +49,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
       );
       if (loadAxios.status === 201) {
         alert('회원가입 성공');
-        window.location.replace('/');
+        navigate('/');
       }
     } catch (error: any) {
       setError(error);
