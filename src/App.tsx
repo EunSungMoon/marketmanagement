@@ -2,19 +2,21 @@ import React from 'react';
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 import Login from './pages/Login';
 import './styles/style.scss';
-import { useSampleState } from './context/UserContext';
 import NoUserHeader from './layout/NoUserHeader';
 import Header from './layout/Header';
+import Signup from './pages/Signup';
+import Main from './pages/Main';
 
 function App() {
-  const state = useSampleState();
   return (
     <BrowserRouter>
       <div className="App">
         <div className="container-fluid">
-          {state.user === 'true' ? <Header /> : <NoUserHeader />}
+          {localStorage.token ? <Header /> : <NoUserHeader />}
           <Routes>
             <Route path="/" element={<Login />} />
+            <Route path="/signup" element={<Signup />} />
+            {localStorage.token ? <Route path="/main" element={<Main />} /> : null}
           </Routes>
         </div>
       </div>

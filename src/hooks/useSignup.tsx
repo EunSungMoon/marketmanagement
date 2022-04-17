@@ -1,10 +1,13 @@
+/* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
-import axios from 'axios';
+import { useNavigate } from 'react-router';
+import axios, { AxiosError } from 'axios';
 
 export interface validateValues {
   username: string;
   password: string;
+  passwordCheck: string;
 }
 
 export interface initValues {
@@ -12,10 +15,12 @@ export interface initValues {
   onSubmit: any;
 }
 
-export default function useJoin({ initialValues, onSubmit }: initValues) {
+export default function useLogin({ initialValues, onSubmit }: initValues) {
   const [values, setValues] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
-  const [loginFail, setLoginFail] = useState(false);
+  const [error, setError] = useState<AxiosError>();
+
+  const navigate = useNavigate();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -28,10 +33,10 @@ export default function useJoin({ initialValues, onSubmit }: initValues) {
     setValues(values);
   };
 
-  const handleAxiosLogin = async () => {
+  const handleAxiosSignup = async () => {
     try {
       const loadAxios = await axios.post(
-        'http://15.164.62.156:8000/api/login/',
+        'http://15.164.62.156:8000/api/register/',
         {
           username: values.username,
           password: values.password,
@@ -42,26 +47,25 @@ export default function useJoin({ initialValues, onSubmit }: initValues) {
           },
         },
       );
-      // if (loadAxios.status === 200) {
-      //   setLoginFail(false);
-      //   localStorage.setItem('token', loadAxios.data.token)
-      // }
-      console.log(loadAxios);
-      localStorage.setItem('token', loadAxios.data.token);
+      if (loadAxios.status === 201) {
+        alert('회원가입 성공');
+        window.location.replace('/');
+      }
     } catch (error: any) {
-      setLoginFail(true);
+      setError(error);
+      alert('회원가입에 실패했습니다');
     }
   };
 
   const handleLogout = () => {
     localStorage.removeItem('token');
-    // document.location.href = '/'
+    navigate('/');
   };
 
   useEffect(() => {
     if (submitting) {
-      handleAxiosLogin();
       onSubmit(values);
+      handleAxiosSignup();
     }
     setSubmitting(false);
   }, [submitting]);
@@ -69,7 +73,7 @@ export default function useJoin({ initialValues, onSubmit }: initValues) {
   return {
     values,
     submitting,
-    loginFail,
+    error,
     handleChange,
     handleSubmit,
     handleLogout,
