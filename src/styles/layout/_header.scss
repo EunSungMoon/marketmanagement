@@ -3,14 +3,18 @@
 @import "~bootstrap/scss/mixins";
 
 #header {
-  .headerImg{
-    background: url('../images/shortheader.png');
+  .headerImg {
+    background: url("../images/shortheader.png");
     background-repeat: repeat-x;
     background-size: contain;
     height: 80px;
   }
   .logoArea {
     position: relative;
+    margin: 0;
+    img {
+      height: 36px;
+    }
   }
   .formWrap {
     @include display(flex-end, center);
@@ -58,8 +62,8 @@
 }
 
 #noUserHeader {
-  .headerImg{
-    background: url('../images/longheader.png');
+  .headerImg {
+    background: url("../images/longheader.png");
     background-repeat: repeat-x;
     background-size: contain;
     height: 80px;

@@ -30,7 +30,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
 
   const handleAxiosLogin = async () => {
     try {
-      const loadAxios = await axios.post(
+      const loadData = await axios.post(
         'http://15.164.62.156:8000/api/login/',
         {
           username: values.username,
@@ -42,9 +42,9 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
           },
         },
       );
-      if (loadAxios.status === 200) {
-        sessionStorage.setItem('token', loadAxios.data.token);
-        window.location.replace('/main');
+      if (loadData.status === 200) {
+        sessionStorage.setItem('token', loadData.data.token);
+        window.location.replace('/');
       }
     } catch (error: any) {
       setError(error);

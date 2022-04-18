@@ -44,7 +44,7 @@ export default function Header() {
       <div className="container">
         <Navbar expand={false}>
           <Container fluid>
-            <Link to={{ pathname: `/` }}>
+            <Link to={{ pathname: `/main` }}>
               <h1 className="logoArea">
                 <img src={logo} alt="로고" />
                 <span className="blind">채미왔소</span>

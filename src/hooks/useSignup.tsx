@@ -58,7 +58,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
   };
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
+    sessionStorage.removeItem('token');
     navigate('/');
   };
 
