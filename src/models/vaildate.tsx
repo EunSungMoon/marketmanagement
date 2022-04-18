@@ -9,7 +9,7 @@ export default function validate({ username, password, passwordCheck }: validate
 
   if (!username) {
     errors.username = '*이메일이 입력되지 않았습니다.';
-  }
+  } 
   if (!password) {
     errors.password = '*비밀번호가 입력되지 않았습니다.';
   }

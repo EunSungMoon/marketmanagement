@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-empty-function */
 import React, { useState } from 'react';
@@ -21,6 +22,7 @@ export default function Login() {
     handleSubmit,
     handleCheckID,
     changeBtnName,
+    handlePassword,
   } = useSignup({
     initialValues: { username: '', password: '', passwordCheck: '' },
     onSubmit: () => {},
@@ -55,7 +57,7 @@ export default function Login() {
               <p className="font-r error">*사용할 수 없는 아이디(ID)입니다.</p>
             )
           ) : null}
-          {errors.username && <p className="font-r error">{errors.username}</p>}
+          {errorUser && values.username === '' && <p className="font-r error">{errors.username}</p>}
           <div className="userCheck">
             <button
               type="button"
@@ -72,12 +74,15 @@ export default function Login() {
             className="login-size login-input backColor-g"
             name="password"
             placeholder="패스워드"
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              handlePassword(e);
+            }}
           />
           {errorPassword && values.password.length < 8 && (
             <p className="font-r error">*8자 이상의 패스워드를 사용해야 합니다.</p>
           )}
-          {!errorPassword && errors.password && <p className="font-r error">{errors.password}</p>}
+          {errorPassword && errors.password && <p className="font-r error">{errors.password}</p>}
         </div>
         <div className="idWrap">
           <input
@@ -90,7 +95,7 @@ export default function Login() {
               handleChange(e);
             }}
           />
-          {!errorPassword && errors.passwordCheck && <p className="font-r error">{errors.passwordCheck}</p>}
+          {errorPassword && errors.passwordCheck && <p className="font-r error">{errors.passwordCheck}</p>}
           {noMatchPassword && <p className="font-r error">*비밀번호가 일치하지 않습니다.</p>}
           <p className="font-dg pwInfo">비밀번호는 8개 이상의 영문자/숫자/특수문자를 사용합니다.</p>
         </div>

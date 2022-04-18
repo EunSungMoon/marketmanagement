@@ -20,8 +20,9 @@ export interface initValues {
 export default function useLogin({ initialValues, onSubmit, validate }: initValues) {
   const [values, setValues] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
-  const [errors, setErrors] = useState({} as any);
+  const [errors, setErrors] = useState(initialValues);
   const [error, setError] = useState<AxiosError>();
+  const [loading, setLoading] = useState(false);
   const [errorUser, setErrorUser] = useState(false); // 에러메세지 사라지게
   const [errorPassword, setErrorPassword] = useState(false);
   const [checkID, setCheckID] = useState(false); // 중복체크여부
@@ -30,16 +31,17 @@ export default function useLogin({ initialValues, onSubmit, validate }: initValu
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     handleUniqueCheck(e);
+    handlePassword(e);
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
+    console.log(values);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setSubmitting(true);
     e.preventDefault();
-    setValues(values);
-    await new Promise((r) => setTimeout(r, 1000));
     setErrors(validate(errors));
+    await new Promise((r) => setTimeout(r, 1000));
   };
 
   const changeBtnName = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -53,13 +55,20 @@ export default function useLogin({ initialValues, onSubmit, validate }: initValu
       setErrorUser(false);
     } else if (e.target.value === values.username) {
       setErrorUser(true);
-    } else if (e.target.value === values.password) {
+    }
+  };
+
+  const handlePassword = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.value === values.password) {
       setErrorPassword(true);
+    } else if (values.password === '') {
+      setErrorPassword(false);
     }
   };
 
   const handleAxiosSignup = async () => {
     try {
+      setLoading(true);
       const loadAxios = await axios.post(
         'http://15.164.62.156:8000/api/register/',
         {
@@ -96,6 +105,7 @@ export default function useLogin({ initialValues, onSubmit, validate }: initValu
           },
         },
       );
+      console.log(loadAxios);
       if (loadAxios.status === 200) {
         setCheckID(true);
       } else if (loadAxios.status === 202) {
@@ -113,12 +123,11 @@ export default function useLogin({ initialValues, onSubmit, validate }: initValu
 
   useEffect(() => {
     if (submitting) {
-      if (Object.keys(errors).length === 0) {
-        onSubmit(values);
-        handleAxiosSignup();
-      }
+      onSubmit(values);
+      handleAxiosSignup();
+      setSubmitting(false);
     }
-    setSubmitting(false);
+    return () => setLoading(false);
   }, [errors]);
 
   return {
@@ -134,5 +143,6 @@ export default function useLogin({ initialValues, onSubmit, validate }: initValu
     handleLogout,
     handleCheckID,
     changeBtnName,
+    handlePassword,
   };
 }
