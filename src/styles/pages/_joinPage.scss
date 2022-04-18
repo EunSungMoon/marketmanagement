@@ -2,7 +2,7 @@
   img {
     width: 325px;
   }
-  .inputWrap {
+  .formWrap {
     margin: 32px 0;
     padding: 40px;
     border-radius: 7px;
@@ -23,13 +23,13 @@
       }
       .pwInfo{
         font-size: 13px;
-        margin-bottom: 0;
       }
       .error{
         font-size: 13px;
       }
     }
   }
+
   .login {
     &-size {
       width: 325px;

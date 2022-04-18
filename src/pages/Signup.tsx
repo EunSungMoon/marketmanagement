@@ -37,7 +37,7 @@ export default function Login() {
   return (
     <main id="joinMain" className="container flex">
       <img src={logo} alt="채미왔소" />
-      <form id="signup" className="flex inputWrap backColor-w" onSubmit={handleSubmit}>
+      <form id="signup" className="flex formWrap" onSubmit={handleSubmit}>
         <div className="idWrap">
           <input
             type="text"
@@ -52,17 +52,17 @@ export default function Login() {
           />
           {errorUser ? (
             checkID ? (
-              <p className="font-o error">*사용할 수 있는 아이디(ID)입니다.</p>
+              <p className="font-g error">*사용할 수 있는 아이디(ID)입니다.</p>
             ) : (
-              <p className="font-r error">*사용할 수 없는 아이디(ID)입니다.</p>
+              <p className="font-o error">*사용할 수 없는 아이디(ID)입니다.</p>
             )
           ) : null}
-          {errorUser && values.username === '' && <p className="font-r error">{errors.username}</p>}
+          {errorUser && values.username === '' && <p className="font-o error">{errors.username}</p>}
           <div className="userCheck">
             <button
               type="button"
               onClick={handleCheckID}
-              className={`userCheckBtn ${checkID && errorUser ? 'backColor-o' : 'backColor-dg'}`}
+              className={`userCheckBtn ${checkID && errorUser ? 'backColor-m' : 'backColor-dg'}`}
             >
               {checkID && errorUser ? '확인완료' : '중복확인'}
             </button>
@@ -80,9 +80,9 @@ export default function Login() {
             }}
           />
           {errorPassword && values.password.length < 8 && (
-            <p className="font-r error">*8자 이상의 패스워드를 사용해야 합니다.</p>
+            <p className="font-o error">*8자 이상의 패스워드를 사용해야 합니다.</p>
           )}
-          {errorPassword && errors.password && <p className="font-r error">{errors.password}</p>}
+          {errorPassword && errors.password && <p className="font-o error">{errors.password}</p>}
         </div>
         <div className="idWrap">
           <input
@@ -95,12 +95,10 @@ export default function Login() {
               handleChange(e);
             }}
           />
-          {errorPassword && errors.passwordCheck && <p className="font-r error">{errors.passwordCheck}</p>}
-          {noMatchPassword && <p className="font-r error">*비밀번호가 일치하지 않습니다.</p>}
-          <p className="font-dg pwInfo">비밀번호는 8개 이상의 영문자/숫자/특수문자를 사용합니다.</p>
+          {errorPassword && errors.passwordCheck && <p className="font-o error">{errors.passwordCheck}</p>}
+          {noMatchPassword && <p className="font-o error">*비밀번호가 일치하지 않습니다.</p>}
+          <p className="font-g pwInfo">비밀번호는 8개 이상의 영문자/숫자/특수문자를 사용합니다.</p>
         </div>
-      </form>
-      <div className="flex">
         <button
           type="submit"
           className={`login-size login-btn ${
@@ -120,7 +118,7 @@ export default function Login() {
         >
           로그인하러 가기
         </button>
-      </div>
+      </form>
     </main>
   );
 }

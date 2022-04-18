@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-promise-executor-return */
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-explicit-any */
@@ -34,7 +35,6 @@ export default function useLogin({ initialValues, onSubmit, validate }: initValu
     handlePassword(e);
     const { name, value } = e.target;
     setValues({ ...values, [name]: value });
-    console.log(values);
   };
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -105,7 +105,6 @@ export default function useLogin({ initialValues, onSubmit, validate }: initValu
           },
         },
       );
-      console.log(loadAxios);
       if (loadAxios.status === 200) {
         setCheckID(true);
       } else if (loadAxios.status === 202) {

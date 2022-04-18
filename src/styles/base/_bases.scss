@@ -21,7 +21,7 @@ body {
   &-w {
     background-color: $white-color;
   }
-  &-o {
+  &-m {
     background-color: $main-color;
   }
   &-g {
@@ -50,8 +50,11 @@ body {
   &-g {
     color: $gray-color;
   }
-  &-o {
+  &-m {
     color: $main-color;
+  }
+  &-o {
+    color: #FFA544;
   }
 }
 .w {

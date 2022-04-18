@@ -16,6 +16,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
   const [values, setValues] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<AxiosError>();
+  const [loginFail, setLoginFail] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -44,10 +45,12 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
       );
       if (loadData.status === 200) {
         sessionStorage.setItem('token', loadData.data.token);
+        setLoginFail(false);
         window.location.replace('/');
       }
     } catch (error: any) {
       setError(error);
+      setLoginFail(true);
     }
   };
 
@@ -68,6 +71,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
     values,
     submitting,
     error,
+    loginFail,
     handleChange,
     handleSubmit,
     handleLogout,
