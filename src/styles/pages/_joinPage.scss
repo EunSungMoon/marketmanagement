@@ -55,7 +55,3 @@
     }
   }
 }
-.flex {
-  @include display(center, center);
-  flex-direction: column;
-}

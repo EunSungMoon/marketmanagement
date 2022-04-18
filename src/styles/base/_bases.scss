@@ -89,6 +89,10 @@ body {
 .white-space {
   white-space: nowrap;
 }
+.flex {
+  @include display(center, center);
+  flex-direction: column;
+}
 
 /**********************************************************
 
