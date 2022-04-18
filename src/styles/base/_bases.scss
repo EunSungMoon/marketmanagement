@@ -27,6 +27,15 @@ body {
   &-g {
     background-color: $gray-color;
   }
+  &-dg {
+    background-color: $deepgray-color;
+  }
+  &-1stg {
+    background-color: $firstGreen-color;
+  }
+  &-2ndg {
+    background-color: $secondGreen-color;
+  }
 }
 .font {
   &-dg {
@@ -37,6 +46,12 @@ body {
   }
   &-b {
     color: $black-color;
+  }
+  &-g {
+    color: $gray-color;
+  }
+  &-o {
+    color: $main-color;
   }
 }
 .w {

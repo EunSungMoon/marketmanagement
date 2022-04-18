@@ -1,0 +1,61 @@
+#joinMain {
+  img {
+    width: 325px;
+  }
+  .inputWrap {
+    margin: 32px 0;
+    padding: 40px;
+    border-radius: 7px;
+    .idWrap {
+      position: relative;
+      .userCheck {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        .userCheckBtn {
+          border: none;
+          width: 76px;
+          height: 26px;
+          font-size: 13px;
+          color: $white-color;
+          border-radius: 7px;
+        }
+      }
+      .pwInfo{
+        font-size: 13px;
+        margin-bottom: 0;
+      }
+      .error{
+        font-size: 13px;
+      }
+    }
+  }
+  .login {
+    &-size {
+      width: 325px;
+      height: 60px;
+      border: none;
+      border-radius: 7px;
+    }
+    &-input {
+      padding-left: 19.5px;
+      outline: none;
+      margin-bottom: 16px;
+      &::placeholder {
+        color: $white-color;
+      }
+      &:-webkit-autofill {
+        transition: background-color 5000s ease-in-out 0s;
+        -webkit-text-fill-color: $black-color;
+      }
+    }
+    &-btn {
+      color: $white-color;
+      margin-bottom: 16px;
+    }
+  }
+}
+.flex {
+  @include display(center, center);
+  flex-direction: column;
+}
