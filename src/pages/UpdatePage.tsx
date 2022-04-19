@@ -20,7 +20,7 @@ export default function UpdatePage() {
   const [floor, setFloor] = useState([] as any);
   const [location, setLocation] = useState([] as any);
   const [loading, setLoading] = useState(false);
-  const [errors, setErrors] = useState<AxiosError>();
+  const [, setErrors] = useState<AxiosError>();
   const [open, setOpen] = useState<any>();
   const [stringOpen, setStringOpen] = useState('');
   const [openDate, setOpenDate] = useState<any>();
@@ -103,7 +103,6 @@ export default function UpdatePage() {
     return () => setLoading(true);
   }, []);
 
-  // if (errors) return <div>{errors}</div>;
   return (
     <main id="updateMain" className="container mainWrap">
       <div className="whiteBox backColor-w w-100">
