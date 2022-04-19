@@ -69,3 +69,23 @@
     height: 80px;
   }
 }
+
+.logout{
+  &-position{
+    position: absolute;
+    bottom: 1.5%;
+    right: 5%;
+  }
+  &-button{
+    border: none;
+    width: 110px;
+    height: 34px;
+    border-radius: 12px;
+    border: 2px solid $main-color;
+    color: $main-color;
+    &:hover{
+      background: $main-color;
+      color: $white-color;
+    }
+  }
+}

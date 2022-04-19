@@ -80,9 +80,6 @@ export default function Header() {
                     등록하기
                   </Link>
                 </button>
-                <button type="button" className="enrollBtn margin-percent backColor-w" onClick={handleLogout}>
-                  로그아웃
-                </button>
               </div>
 
               <Navbar.Toggle aria-controls="offcanvasNavbar" className="mainColor">
@@ -122,6 +119,9 @@ export default function Header() {
                         <Navbar.Text className="nav-link txtDeco-m">폐시약장</Navbar.Text>
                       </Nav.Item>
                     </Link>
+                    <button type="button" className="logout-position logout-button backColor-w" onClick={handleLogout}>
+                      로그아웃
+                    </button>
                   </Nav>
                 </Offcanvas.Body>
               </Navbar.Offcanvas>
