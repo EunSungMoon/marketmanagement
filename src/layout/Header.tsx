@@ -13,6 +13,11 @@ export default function Header() {
   const [values, setValues] = useState('');
   const navigate = useNavigate();
 
+  const handleLogout = () => {
+    sessionStorage.removeItem('token');
+    document.location.href = '/';
+  };
+
   const { lists } = useGet({
     method: 'GET',
     url: `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/storage/`,
@@ -40,7 +45,7 @@ export default function Header() {
     }
   };
   return (
-    <header id="header" className='backColor-w'>
+    <header id="header" className="backColor-w">
       <div className="container">
         <Navbar expand={false}>
           <Container fluid>
@@ -74,6 +79,9 @@ export default function Header() {
                   <Link className="txtDeco-m" to="/enroll/" state={{ data: 'enroll' }}>
                     등록하기
                   </Link>
+                </button>
+                <button type="button" className="enrollBtn margin-percent backColor-w" onClick={handleLogout}>
+                  로그아웃
                 </button>
               </div>
 

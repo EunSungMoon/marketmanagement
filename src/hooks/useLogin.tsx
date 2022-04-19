@@ -54,11 +54,6 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
     }
   };
 
-  const handleLogout = () => {
-    sessionStorage.removeItem('token');
-    // document.location.href = '/'
-  };
-
   useEffect(() => {
     if (submitting) {
       onSubmit(values);
@@ -74,6 +69,5 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
     loginFail,
     handleChange,
     handleSubmit,
-    handleLogout,
   };
 }
