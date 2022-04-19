@@ -6,7 +6,12 @@ import NoUserHeader from './layout/NoUserHeader';
 import Header from './layout/Header';
 import Signup from './pages/Signup';
 import Main from './pages/Main';
+import Board from './layout/Board';
 import EmptyPage from './pages/EmptyPage';
+import EnrollPage from './pages/EnrollPage';
+import ConfirmPage from './pages/ConfirmPage';
+import UpdatePage from './pages/UpdatePage';
+import SearchBoard from './pages/SearchBoard';
 
 function App() {
   return (
@@ -16,7 +21,14 @@ function App() {
           {sessionStorage.token ? <Header /> : <NoUserHeader />}
           <Routes>
             {sessionStorage.token ? (
-              <Route path="/" element={<Main />} />
+              <>
+                <Route path="/" element={<Main />} />
+                <Route path="/list/:id" element={<Board />} />
+                <Route path="/enroll" element={<EnrollPage />} />
+                <Route path="/update/:serial" element={<UpdatePage />} />
+                <Route path="/confirm/:serial" element={<ConfirmPage />} />
+                <Route path="/search/:values" element={<SearchBoard />} />
+              </>
             ) : (
               <>
                 <Route path="/" element={<Login />} />
@@ -24,7 +36,7 @@ function App() {
               </>
             )}
             <Route path="*" element={<Navigate replace to="/404" />} />
-            <Route path='/404' element={<EmptyPage />}/>
+            <Route path="/404" element={<EmptyPage />} />
           </Routes>
         </div>
       </div>

@@ -14,7 +14,7 @@ export default function ModalComponent(props: any) {
         <img src={props.img} className="mapImg" alt='시약장 약도' />
       </Modal.Body>
       <Modal.Footer>
-        <Button onClick={props.onHide} className='backColor-o closeModal' title='닫기'>닫기</Button>
+        <Button onClick={props.onHide} className='backColor-m closeModal' title='닫기'>닫기</Button>
       </Modal.Footer>
     </Modal>
   );

@@ -67,7 +67,7 @@ body {
   margin: 0 auto;
 }
 .txtDeco {
-  &-o {
+  &-m {
     @include aTag($main-color);
     &:hover {
       color: inherit;

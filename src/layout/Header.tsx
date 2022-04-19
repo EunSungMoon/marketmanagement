@@ -71,7 +71,7 @@ export default function Header() {
                   </button>
                 </div>
                 <button type="button" className="enrollBtn margin-percent backColor-w">
-                  <Link className="txtDeco-o" to="/enroll/" state={{ data: 'enroll' }}>
+                  <Link className="txtDeco-m" to="/enroll/" state={{ data: 'enroll' }}>
                     등록하기
                   </Link>
                 </button>
@@ -97,10 +97,10 @@ export default function Header() {
                           pathname: `/list/${list.id}/`,
                         }}
                         key={list.name}
-                        className="txtDeco-o"
+                        className="txtDeco-m"
                       >
                         <Nav.Item>
-                          <Navbar.Text className="nav-link txtDeco-o">{list.name}</Navbar.Text>
+                          <Navbar.Text className="nav-link txtDeco-m">{list.name}</Navbar.Text>
                         </Nav.Item>
                       </Link>
                     ))}
@@ -108,10 +108,10 @@ export default function Header() {
                       to={{
                         pathname: '/list/1/',
                       }}
-                      className="txtDeco-o"
+                      className="txtDeco-m"
                     >
                       <Nav.Item>
-                        <Navbar.Text className="nav-link txtDeco-o">폐시약장</Navbar.Text>
+                        <Navbar.Text className="nav-link txtDeco-m">폐시약장</Navbar.Text>
                       </Nav.Item>
                     </Link>
                   </Nav>
