@@ -161,7 +161,7 @@ export default function UpdatePage() {
                       />
                       <button
                         type="button"
-                        className="clearBtn"
+                        className="clearBtn edit-clear-position"
                         onClick={() => {
                           setValues({ ...values, open: '' });
                           setOpen('');
@@ -203,7 +203,7 @@ export default function UpdatePage() {
                       />
                       <button
                         type="button"
-                        className="clearBtn"
+                        className="clearBtn edit-clear-position"
                         onClick={() => {
                           setValues({ ...values, open_date: '' });
                           setOpenDate('');

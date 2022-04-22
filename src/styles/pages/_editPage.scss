@@ -66,11 +66,11 @@
     right: 1%;
     padding: 0;
     padding-left: 1px;
+    width: 20px;
+    height: 20px;
     &:hover {
       background: $gray-color;
       border-radius: 15px;
-      width: 20px;
-      height: 20px;
     }
   }
 }
@@ -145,11 +145,17 @@
     .dday-input {
       height: 20px;
     }
-    .clearBtn{
+    .clearBtn {
       margin-top: 0;
-      svg{
+      svg {
         vertical-align: middle;
       }
+    }
+    .enroll-clear-position {
+      bottom: 0;
+    }
+    .edit-clear-position {
+      bottom: 8px;
     }
   }
 }
@@ -183,11 +189,17 @@
     .dday-input {
       height: 28px;
     }
-    .clearBtn{
+    .clearBtn {
       margin-top: 4px;
-      svg{
+      svg {
         vertical-align: baseline;
       }
+    }
+    .enroll-clear-position {
+      bottom: 3px;
+    }
+    .edit-clear-position {
+      bottom: 6px;
     }
   }
 }

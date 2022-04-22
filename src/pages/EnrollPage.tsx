@@ -129,7 +129,7 @@ export default function EnrollPage() {
               />
               <button
                 type="button"
-                className='clearBtn'
+                className='clearBtn enroll-clear-position'
                 onClick={() => {
                   setValues({ ...values, date: '' });
                   setDate('');
