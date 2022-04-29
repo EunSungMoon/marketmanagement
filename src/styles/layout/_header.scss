@@ -7,6 +7,7 @@
     background: url("../images/shortheader.png");
     background-repeat: repeat-x;
     background-size: contain;
+    background-color: $main-color;
     height: 80px;
   }
   .logoArea {
@@ -70,20 +71,19 @@
   }
 }
 
-.logout{
-  &-position{
-    position: absolute;
-    bottom: 1.5%;
-    right: 5%;
+.logout {
+  &-position {
+    margin-top: 50%;
+    margin-left: 70%;
   }
-  &-button{
+  &-button {
     border: none;
     width: 110px;
     height: 34px;
     border-radius: 12px;
     border: 2px solid $main-color;
     color: $main-color;
-    &:hover{
+    &:hover {
       background: $main-color;
       color: $white-color;
     }
