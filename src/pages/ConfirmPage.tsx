@@ -57,7 +57,7 @@ export default function ConfirmPage() {
                 <td>{lists.reagent_name}</td>
               </tr>
               <tr>
-                <th>시리얼 넘버</th>
+                <th>관리번호</th>
                 <td>{lists.serial}</td>
               </tr>
               <tr>
@@ -104,6 +104,12 @@ export default function ConfirmPage() {
                 <th>보관조건</th>
                 <td>{lists.condition}°C</td>
               </tr>
+              {btnState ? (
+                <tr>
+                  <th>비고</th>
+                  <td>{lists.extra}</td>
+                </tr>
+              ) : null}
             </tbody>
           </table>
         </div>

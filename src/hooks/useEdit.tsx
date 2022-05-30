@@ -10,6 +10,7 @@ interface inputValues {
   floor: string;
   open: string;
   open_date: string;
+  extra: string;
 }
 
 interface initValues {

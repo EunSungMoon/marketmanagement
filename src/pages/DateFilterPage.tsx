@@ -1,13 +1,14 @@
-/* eslint-disable jsx-a11y/control-has-associated-label */
-/* eslint-disable consistent-return */
+/* eslint-disable jsx-a11y/no-static-element-interactions */
+/* eslint-disable jsx-a11y/click-events-have-key-events */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable camelcase */
-import React, { useState, useEffect } from 'react';
-import { useParams, Link } from 'react-router-dom';
-import axios, { AxiosError } from 'axios';
-import { BsBookmark } from 'react-icons/bs';
-import { FiMapPin } from 'react-icons/fi';
-import { AiOutlineCaretLeft, AiOutlineCaretDown, AiOutlineFileExcel, AiOutlineInfoCircle } from 'react-icons/ai';
+import React, { useState } from 'react';
+import DatePicker from 'react-datepicker';
+import { ko } from 'date-fns/esm/locale';
+import dayjs from 'dayjs';
+import 'react-datepicker/dist/react-datepicker.css';
+import { Link } from 'react-router-dom';
+import { AiOutlineCaretLeft, AiOutlineCaretDown, AiOutlineInfoCircle } from 'react-icons/ai';
 import {
   Box,
   Collapse,
@@ -20,30 +21,12 @@ import {
   TableRow,
   Paper,
 } from '@mui/material';
+import { BsBookmark } from 'react-icons/bs';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
+import useDateFilter from '../hooks/useDateFilter';
 import apiSwagger from '../models/apiSwagger.json';
 import ModalComponent from '../component/ModalComponent';
-
-interface reagentType {
-  serial: string;
-  open: string;
-  open_date: string;
-  date: string;
-  reagent_name: string;
-  cat_no: string;
-  location: string;
-  company: number;
-  amount: string;
-  floor: string;
-  owner: string;
-  confirmer: string;
-  condition: string;
-  extra: string;
-}
-
-type paramsIp = {
-  id: string;
-};
+import { reagentType } from './SearchBoard';
 
 function createData(name: string, total: number, waste: number, usable: number, reagent_list: Array<reagentType>) {
   return {
@@ -58,7 +41,9 @@ function createData(name: string, total: number, waste: number, usable: number, 
 function Row(props: { list: ReturnType<typeof createData> }) {
   const { list } = props;
   const [open, setOpen] = useState(false);
-  const { id } = useParams<paramsIp>();
+  const [modalShow, setModalShow] = useState(false);
+  const [title, setTitle] = useState('');
+  const [mapImg, setMapImg] = useState('');
 
   const handleDate = (paraDate1: string, paraDate2: string) => {
     const dateNum1 = new Date(paraDate1);
@@ -67,11 +52,10 @@ function Row(props: { list: ReturnType<typeof createData> }) {
     if (paraDate2) {
       dateNum2 = new Date(paraDate2);
     }
-    if (!paraDate2) {
-      if (dateNum1 < today) {
-        return 'red';
-      }
-    } else if (dateNum1 < today || dateNum2 < today) {
+    if (!paraDate2 && dateNum1 < today) {
+      return 'red';
+    }
+    if (dateNum1 < today || dateNum2 < today) {
       return 'red';
     }
     return '';
@@ -87,7 +71,7 @@ function Row(props: { list: ReturnType<typeof createData> }) {
   return (
     <>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} onClick={() => setOpen(!open)}>
-        <TableCell className="white-space" component="th" scope="row">
+        <TableCell component="th" scope="row">
           {list.name}
         </TableCell>
         <TableCell>{list.total}</TableCell>
@@ -107,7 +91,7 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                 <TableHead>
                   <TableRow>
                     <TableCell className="font-dg white-space" style={{ width: '18%' }}>
-                      시리얼 넘버
+                      관리번호
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '12%' }}>
                       Cat.
@@ -127,11 +111,9 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                     <TableCell className="font-dg white-space" style={{ width: '6%' }}>
                       용량
                     </TableCell>
-                    {id !== '1' && (
-                      <TableCell className="font-dg white-space" style={{ width: '6%' }}>
-                        보관위치
-                      </TableCell>
-                    )}
+                    <TableCell className="font-dg white-space" style={{ width: '6%' }}>
+                      보관위치
+                    </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '9%' }}>
                       담당자/확인자
                     </TableCell>
@@ -155,7 +137,7 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                         {historyRow.cat_no}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.date ? historyRow.date : 'NA'}
+                        {historyRow.date}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
                         {historyRow.open}
@@ -180,13 +162,21 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
                         {historyRow.amount}
                       </TableCell>
-                      {id !== '1' && (
-                        <TableCell
-                          className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}
+                      <TableCell
+                        className={`font-dg white-space goToMap ${handleDate(historyRow.date, historyRow.open_date)}`}
+                        title="약도보기"
+                      >
+                        <span
+                          onClick={() => {
+                            setModalShow(true);
+                            setTitle(historyRow.location);
+                            setMapImg(historyRow.map);
+                          }}
                         >
-                          {historyRow.floor}
-                        </TableCell>
-                      )}
+                          {historyRow.location}
+                        </span>
+                        {historyRow.location !== '폐시약장' ? `-${historyRow.floor}` : ''}
+                      </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
                         {historyRow.owner}/{historyRow.confirmer}
                       </TableCell>
@@ -201,109 +191,91 @@ function Row(props: { list: ReturnType<typeof createData> }) {
           </Collapse>
         </TableCell>
       </TableRow>
+      <ModalComponent
+        show={modalShow}
+        title={title}
+        img={`${apiSwagger.url}:${apiSwagger.port}${mapImg}`}
+        onHide={() => setModalShow(false)}
+      />
     </>
   );
 }
 
-export default function Board() {
-  const { id } = useParams<paramsIp>();
-  const [lists, setLists] = useState([] as any);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<AxiosError>();
-  const [locationTitle, setLocationTitle] = useState([] as any);
-  const [title, setTitle] = useState('');
-  const [mapImg, setMapImg] = useState('');
-  const [modalShow, setModalShow] = useState(false);
+export default function DateFilterPage() {
+  const [start, setStart] = useState<any>();
+  const [end, setEnd] = useState<any>();
+  const [startStringDate, setStartStringDate] = useState('');
+  const [endStringDate, setEndStringDate] = useState('');
 
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/listdetail/${id}/`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      setLists(loadData.data);
-    } catch (error: any) {
-      setError(error);
-    }
+  const { values, lists, handleChange, handleSubmit } = useDateFilter({
+    initialValue: {
+      start: startStringDate,
+      end: endStringDate,
+    },
+    // eslint-disable-next-line @typescript-eslint/no-empty-function
+    onSubmit: () => {},
+  });
+
+  const handleStartDatePicker = (value: Date) => {
+    setStart(value);
+    const stringToDate = value.toString();
+    const stringToDateFormat = dayjs(stringToDate).format('YYYY-MM-DD');
+    values.start = stringToDateFormat;
+    setStartStringDate(stringToDateFormat);
   };
 
-  const loadLocationAxios = async () => {
-    try {
-      setLoading(true);
-      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/storage/`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-      });
-      setLocationTitle(loadData.data);
-    } catch (error: any) {
-      setError(error);
-    }
+  const handleEndDatePicker = (value: Date) => {
+    setEnd(value);
+    const stringToDate = value.toString();
+    const stringToDateFormat = dayjs(stringToDate).format('YYYY-MM-DD');
+    values.end = stringToDateFormat;
+    setEndStringDate(stringToDateFormat);
   };
-
-  const loadExportFileAxios = async () => {
-    try {
-      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/export/${id}/`, {
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        responseType: 'blob',
-      });
-      const url = window.URL.createObjectURL(new Blob([loadData.data]));
-      const link = document.createElement('a');
-      link.href = url;
-      link.download = id === '1' ? '폐시약장.csv' : `${title}.csv`;
-      link.click();
-    } catch (error: any) {
-      setError(error);
-    }
-  };
-
-  useEffect(() => {
-    if (!loading) {
-      loadLocationAxios();
-      loadData();
-    }
-    if (loading && id !== '1') {
-      const idTostring = Number(id);
-      const key = locationTitle.find((list: any) => list.id === idTostring);
-      setTitle(key.name);
-      setMapImg(key.map);
-    }
-    return () => setLoading(false);
-  }, [id, locationTitle]);
-
-  if (error) return <div>에러가 발생했습니다.</div>;
-  if (loading) return null;
 
   return (
-    <main id="board" className="container">
-      <div className="flex-start">
-        <h2 className="locationTitle">
-          <BsBookmark />
-          {id === '1' ? ' 폐시약장' : ` ${title}`}
+    <main id="board" className="container dateFilter">
+      <div className="flex-space-between titleWrap">
+        <h2 className="datefilterTitle">
+          <BsBookmark /> 개봉현황
         </h2>
-        <button
-          type="button"
-          className="export backColor-w"
-          title="엑셀파일 다운로드하기"
-          onClick={loadExportFileAxios}
-        >
-          <AiOutlineFileExcel />
-        </button>
-        <button type="button" className="export backColor-w" title="약도보기" onClick={() => setModalShow(true)}>
-          <FiMapPin />
-        </button>
-        <ModalComponent
-          show={modalShow}
-          title={id === '1' ? ' 폐시약장' : ` ${title}`}
-          img={id === '1' ? `${apiSwagger.url}:${apiSwagger.port}/media/bulk/map/1.PNG` : `${mapImg}`}
-          onHide={() => setModalShow(false)}
-        />
+        <form id="dateFilter" className="flex-center" onSubmit={handleSubmit}>
+          <DatePicker
+            className="dday-input"
+            name="start"
+            placeholderText="yyyy-mm-dd"
+            selected={start}
+            onChange={(value: Date, e: React.ChangeEvent<HTMLInputElement>) => {
+              handleStartDatePicker(value);
+              handleChange(e);
+            }}
+            dateFormat="yyyy-MM-dd"
+            locale={ko}
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            autoComplete="off"
+          />
+          <DatePicker
+            className="dday-input"
+            name="end"
+            placeholderText="yyyy-mm-dd"
+            selected={end}
+            onChange={(value: Date, e: React.ChangeEvent<HTMLInputElement>) => {
+              handleEndDatePicker(value);
+              handleChange(e);
+            }}
+            dateFormat="yyyy-MM-dd"
+            locale={ko}
+            showMonthDropdown
+            showYearDropdown
+            dropdownMode="select"
+            autoComplete="off"
+          />
+          <button type="submit" className="backColor-w font-m filterButton" form="dateFilter">
+            검색
+          </button>
+        </form>
       </div>
-
       <TableContainer component={Paper} className="customTable">
         <Table aria-label="collapsible table">
           <TableHead className="backColor-g">

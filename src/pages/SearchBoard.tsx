@@ -4,7 +4,7 @@
 /* eslint-disable camelcase */
 import React, { useState, useEffect } from 'react';
 import { Link, useParams } from 'react-router-dom';
-import { AiOutlineCaretLeft, AiOutlineCaretDown } from 'react-icons/ai';
+import { AiOutlineCaretLeft, AiOutlineCaretDown, AiOutlineInfoCircle } from 'react-icons/ai';
 import {
   Box,
   Collapse,
@@ -18,10 +18,11 @@ import {
   Paper,
 } from '@mui/material';
 import axios, { AxiosError } from 'axios';
+import { Popover, OverlayTrigger } from 'react-bootstrap';
 import apiSwagger from '../models/apiSwagger.json';
 import ModalComponent from '../component/ModalComponent';
 
-interface reagentType {
+export interface reagentType {
   serial: string;
   open: string;
   open_date: string;
@@ -36,9 +37,10 @@ interface reagentType {
   confirmer: string;
   condition: string;
   map: string;
+  extra: string;
 }
 
-type paramsIp = {
+export type paramsIp = {
   values: string;
 };
 
@@ -75,6 +77,13 @@ function Row(props: { list: ReturnType<typeof createData> }) {
     }
     return '';
   };
+
+  const popover = (extra: string) => (
+    <Popover id="popover-basic">
+      <Popover.Header as="h3">비고</Popover.Header>
+      <Popover.Body>{extra}</Popover.Body>
+    </Popover>
+  );
 
   return (
     <>
@@ -151,7 +160,18 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                         {historyRow.open}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.open_date}
+                        {historyRow.extra ? (
+                          <OverlayTrigger trigger="click" overlay={popover(historyRow.extra)}>
+                            <button type="button" className="extra">
+                              {historyRow.open_date}{' '}
+                              <span className="extraIcon">
+                                <AiOutlineInfoCircle />
+                              </span>
+                            </button>
+                          </OverlayTrigger>
+                        ) : (
+                          historyRow.open_date
+                        )}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
                         {historyRow.company}

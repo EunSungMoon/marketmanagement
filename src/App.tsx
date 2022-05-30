@@ -12,6 +12,7 @@ import EnrollPage from './pages/EnrollPage';
 import ConfirmPage from './pages/ConfirmPage';
 import UpdatePage from './pages/UpdatePage';
 import SearchBoard from './pages/SearchBoard';
+import DateFilterPage from './pages/DateFilterPage';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
                 <Route path="/" element={<Main />} />
                 <Route path="/list/:id" element={<Board />} />
                 <Route path="/enroll" element={<EnrollPage />} />
+                <Route path="/datefilter/" element={<DateFilterPage />} />
                 <Route path="/update/:serial" element={<UpdatePage />} />
                 <Route path="/confirm/:serial" element={<ConfirmPage />} />
                 <Route path="/search/:values" element={<SearchBoard />} />

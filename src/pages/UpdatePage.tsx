@@ -8,9 +8,9 @@ import { useParams } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { BsX } from 'react-icons/bs';
-import useGetAxios from '../hooks/useGet';
+import useGet from '../hooks/useGet';
 import useEdit, { paramsIp } from '../hooks/useEdit';
-import Dropbox from '../component/Dropdown';
+import { SelectBox2 } from '../component/Dropdown';
 import apiSwagger from '../models/apiSwagger.json';
 
 export default function UpdatePage() {
@@ -20,7 +20,7 @@ export default function UpdatePage() {
   const [floor, setFloor] = useState([] as any);
   const [location, setLocation] = useState([] as any);
   const [loading, setLoading] = useState(false);
-  const [, setErrors] = useState<AxiosError>();
+  const [errors, setErrors] = useState<AxiosError>();
   const [open, setOpen] = useState<any>();
   const [stringOpen, setStringOpen] = useState('');
   const [openDate, setOpenDate] = useState<any>();
@@ -44,7 +44,7 @@ export default function UpdatePage() {
     setStringOpen(stringToDateFormat);
   };
 
-  const { lists } = useGetAxios({
+  const { lists } = useGet({
     method: 'GET',
     url: `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/update/${serial}/`,
     headers: {
@@ -86,6 +86,7 @@ export default function UpdatePage() {
       floor: '',
       open: stringOpen,
       open_date: stringOpenDate,
+      extra: '',
     },
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onSubmit: () => {},
@@ -102,6 +103,8 @@ export default function UpdatePage() {
     }
     return () => setLoading(true);
   }, []);
+  
+  if (errors) return <div>에러가 발생했습니다.</div>;
 
   return (
     <main id="updateMain" className="container mainWrap">
@@ -228,18 +231,16 @@ export default function UpdatePage() {
                 <th>보관위치</th>
                 <td>
                   <div className="w-100 input-flex">
-                    <Dropbox
+                    <SelectBox2
                       inputId="group"
-                      propmt="시약장 선택하기"
                       name="location"
                       options={location}
                       width="halfWidth margin-right10"
                       onChange={handleChange}
                       defaultValue={lists.location}
                     />
-                    <Dropbox
+                    <SelectBox2
                       inputId="group"
-                      propmt="위치 선택하기"
                       name="floor"
                       options={floor}
                       width="halfWidth"
@@ -258,6 +259,19 @@ export default function UpdatePage() {
               <tr>
                 <th>보관조건</th>
                 <td>{lists.condition}°C</td>
+              </tr>
+              <tr>
+                <th>비고</th>
+                <td>
+                  <input
+                    type="text"
+                    name="extra"
+                    className="w-100 input"
+                    onChange={handleChange}
+                    autoComplete="off"
+                    defaultValue={lists.extra}
+                  />
+                </td>
               </tr>
             </tbody>
           </table>

@@ -8,7 +8,7 @@ import axios, { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { BsX } from 'react-icons/bs';
 import { Label, Input } from '../component/FormComponents';
-import Dropdown from '../component/Dropdown';
+import { Dropdown, SelectBox } from '../component/Dropdown';
 import useAdd from '../hooks/useAdd';
 import apiSwagger from '../models/apiSwagger.json';
 
@@ -92,7 +92,7 @@ export default function EnrollPage() {
             />
           </div>
           <div className="inputWrap input-flex w-ratio marginAuto">
-            <Label ratio="label-ratio" use="serialNumber" labelName="시리얼 넘버" />
+            <Label ratio="label-ratio" use="serialNumber" labelName="관리번호" />
             <Input
               id="serialNumber"
               propmt="시리얼 넘버 입력하기"
@@ -158,44 +158,40 @@ export default function EnrollPage() {
           </div>
           <div className="inputWrap input-flex w-ratio marginAuto">
             <Label ratio="label-ratio" use="group" labelName="보관위치" />
-            <Dropdown
+            <SelectBox
               inputId="group"
-              propmt="시약장 선택하기"
               name="location"
               options={location}
               width="halfWidth margin-right10"
               onChange={handleChange}
-              defaultValue=""
+              defaultValue="시약장 선택하기"
             />
-            <Dropdown
+            <SelectBox
               inputId="group"
-              propmt="위치 선택하기"
               name="floor"
               options={floor}
               width="halfWidth"
               onChange={handleChange}
-              defaultValue=""
+              defaultValue="위치 선택하기"
             />
           </div>
           <div className="inputWrap input-flex w-ratio marginAuto">
             <Label ratio="label-ratio" use="worker" labelName="담당자/확인자" />
-            <Dropdown
+            <SelectBox
               inputId="worker"
-              propmt="담당자 선택하기"
               name="owner"
               options={worker}
               width="halfWidth margin-right10"
               onChange={handleChange}
-              defaultValue=""
+              defaultValue="담당자 선택하기"
             />
-            <Dropdown
+            <SelectBox
               inputId="worker"
-              propmt="확인자 선택하기"
               name="confirmer"
               options={worker}
               width="halfWidth"
               onChange={handleChange}
-              defaultValue=""
+              defaultValue="확인자 선택하기"
             />
           </div>
           <div className="inputWrap input-flex w-ratio marginAuto">

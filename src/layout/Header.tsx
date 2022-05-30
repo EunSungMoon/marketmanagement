@@ -1,8 +1,11 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
 import React, { useState } from 'react';
 import { Nav, Navbar, Container, Offcanvas } from 'react-bootstrap';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { BsSearch } from 'react-icons/bs';
+import { BiEdit, BiCalendar } from 'react-icons/bi';
 import { Link, useNavigate } from 'react-router-dom';
 import logo from '../styles/images/textLogo.png';
 import useGet from '../hooks/useGet';
@@ -75,11 +78,16 @@ export default function Header() {
                     <BsSearch />
                   </button>
                 </div>
-                <button type="button" className="enrollBtn margin-percent backColor-w">
-                  <Link className="txtDeco-m" to="/enroll/" state={{ data: 'enroll' }}>
-                    등록하기
-                  </Link>
-                </button>
+                <Link className="txtDeco-m margin-percent" to="/enroll/" state={{ data: 'enroll' }}>
+                  <button type="button" className="enrollBtn backColor-w" title="시약 등록하기">
+                    <BiEdit />
+                  </button>
+                </Link>
+                <Link className="txtDeco-o margin-percent " to="/datefilter/">
+                  <button type="button" className="enrollBtn backColor-w" title="개봉현황 확인하기">
+                    <BiCalendar />
+                  </button>
+                </Link>
               </div>
 
               <Navbar.Toggle aria-controls="offcanvasNavbar" className="mainColor">

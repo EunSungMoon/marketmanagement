@@ -1,0 +1,34 @@
+.dateFilter {
+  .datefilterTitle {
+    color: $white-color;
+    font-size: 20px;
+    margin-bottom: 0;
+  }
+  .flex-center {
+    @include display(center, center);
+  }
+  .flex-space-between {
+    @include display(space-between, center);
+  }
+  .filterButton{
+    width: 135px;
+    height: 35px;
+    border-radius: 7px;
+    border: none;
+  }
+  .titleWrap{
+    margin-bottom: 15px;
+  }
+  .dday-input {
+    width: 240px;
+    height: 32px;
+    border-radius: 7px;
+    border: none;
+    outline: none;
+    background-color: $white-color;
+    color: $black-color;
+    &::placeholder {
+      color: $gray-color;
+    }
+  }
+}
