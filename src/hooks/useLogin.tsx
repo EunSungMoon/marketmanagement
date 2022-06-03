@@ -46,7 +46,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
       if (loadData.status === 200) {
         sessionStorage.setItem('token', loadData.data.token);
         setLoginFail(false);
-        window.location.replace('/');
+        window.location.replace('/main');
       }
     } catch (error: any) {
       setError(error);

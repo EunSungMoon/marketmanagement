@@ -48,7 +48,6 @@ export default function useDateFilter({ initialValue, onSubmit }: initValues) {
         },
       );
       setLists(loadData.data)
-      
     } catch (error: any) {
       setErrors(error);
     }

@@ -23,7 +23,7 @@ function App() {
           <Routes>
             {sessionStorage.token ? (
               <>
-                <Route path="/" element={<Main />} />
+                <Route path="/main" element={<Main />} />
                 <Route path="/list/:id" element={<Board />} />
                 <Route path="/enroll" element={<EnrollPage />} />
                 <Route path="/datefilter/" element={<DateFilterPage />} />
@@ -37,6 +37,7 @@ function App() {
                 <Route path="/signup" element={<Signup />} />
               </>
             )}
+            <Route path="/" element={<Navigate replace to='/list/2' />}/>
             <Route path="*" element={<Navigate replace to="/404" />} />
             <Route path="/404" element={<EmptyPage />} />
           </Routes>
