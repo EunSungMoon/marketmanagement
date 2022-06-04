@@ -1,6 +1,6 @@
 {
-  "short_name": "React App",
-  "name": "Create React App Sample",
+  "short_name": "채미왔소",
+  "name": "구멍가게 재고관리 시스템",
   "icons": [
     {
       "src": "favicon.ico",

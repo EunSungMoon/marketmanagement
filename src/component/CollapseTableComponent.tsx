@@ -224,7 +224,7 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
 }
 
 export default function CollapseTableComponent(props: any) {
-  const { lists } = props;
+  const { lists, condition } = props;
 
   return (
     <TableContainer component={Paper} className="customTable">
@@ -239,9 +239,17 @@ export default function CollapseTableComponent(props: any) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {lists.map((list: ReturnType<typeof createData>) => (
-            <Row key={list.name} list={list} />
-          ))}
+          {condition ? (
+            <tr>
+              <td className="noResult">검색결과가 없습니다.</td>
+            </tr>
+          ) : (
+            <>
+              {lists.map((list: ReturnType<typeof createData>) => (
+                <Row key={list.name} list={list} />
+              ))}
+            </>
+          )}
         </TableBody>
       </Table>
     </TableContainer>

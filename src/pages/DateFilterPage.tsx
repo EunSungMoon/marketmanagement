@@ -14,6 +14,7 @@ export default function DateFilterPage() {
   const [end, setEnd] = useState<any>();
   const [startStringDate, setStartStringDate] = useState('');
   const [endStringDate, setEndStringDate] = useState('');
+  const [search, setSearch] = useState(false);
 
   const { values, lists, handleChange, handleSubmit } = useDateFilter({
     initialValue: {
@@ -79,13 +80,18 @@ export default function DateFilterPage() {
             dropdownMode="select"
             autoComplete="off"
           />
-          <button type="submit" className="backColor-w font-m filterButton" form="dateFilter">
+          <button
+            type="submit"
+            className="backColor-w font-m filterButton"
+            form="dateFilter"
+            onClick={() => setSearch(!search)}
+          >
             검색
           </button>
         </form>
       </div>
 
-      <CollapseTableComponent lists={lists} />
+      <CollapseTableComponent lists={lists} condition={search && lists.length === 0} />
     </main>
   );
 }

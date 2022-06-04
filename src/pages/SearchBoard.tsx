@@ -35,7 +35,7 @@ export default function SearchBoard() {
 
   return (
     <main id="board" className="container">
-      <CollapseTableComponent lists={lists} />
+      <CollapseTableComponent lists={lists} condition={lists.length === 0} />
     </main>
   );
 }
