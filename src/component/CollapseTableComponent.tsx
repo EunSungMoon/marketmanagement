@@ -162,21 +162,21 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
                         {historyRow.date}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.open}
-                      </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
                         {historyRow.extra ? (
                           <OverlayTrigger trigger="click" overlay={popover(historyRow.extra)}>
                             <button type="button" className="extra">
-                              {historyRow.open_date}{' '}
+                              {historyRow.open}{' '}
                               <span className="extraIcon">
                                 <AiOutlineInfoCircle />
                               </span>
                             </button>
                           </OverlayTrigger>
                         ) : (
-                          historyRow.open_date
+                          historyRow.open
                         )}
+                      </TableCell>
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
+                        {historyRow.open_date}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
                         {historyRow.company}
