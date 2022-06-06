@@ -4,7 +4,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import apiSwagger from '../models/apiSwagger.json';
 
 export interface validateValues {
@@ -21,17 +21,12 @@ export interface initValues {
 export default function useLogin({ initialValues, onSubmit }: initValues) {
   const [values, setValues] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<AxiosError>();
   const [loading, setLoading] = useState(false);
   const [uniqueCheck, setUniqueCheck] = useState<boolean>(false);
   const [uniqueCheckMsg, setUniqueCheckMsg] = useState<string>('');
   const [passwordCheckMsg, setPasswordCheckMsg] = useState<string>('');
   const [passwordCheck, setPasswordCheck] = useState<boolean>(false);
-  const [errorPassword, setErrorPassword] = useState<boolean>(false);
-
   const [noMatchPassword, setNoMatchPassword] = useState(false);
-  const [passwordMatchCheck, setPasswordMatchCheck] = useState('');
-
   const [disappearMsg, setDisappearMsg] = useState(false); // 에러메세지 사라지게
 
   const navigate = useNavigate();
@@ -49,23 +44,26 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
     await new Promise((r) => setTimeout(r, 1000));
   };
 
-  const changeBtnName = (e: React.ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value !== values.username) {
-      setUniqueCheck(false);
-    }
-  };
-
   const handleUniqueCheck = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (values.username === '') {
       setDisappearMsg(false);
     } else if (e.target.value === values.username) {
       setDisappearMsg(true);
+    } else if (e.target.value !== values.username) {
+      setDisappearMsg(false);
     }
   };
 
   const handlePasswordChk = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNoMatchPassword(e.target.value !== values.password);
-    setPasswordMatchCheck(e.target.value);
+    if (e.target.value !== values.password) {
+      setNoMatchPassword(true);
+    } else if (e.target.value === values.password) {
+      setNoMatchPassword(false);
+    } else if (e.target.value !== values.passwordCheck) {
+      setNoMatchPassword(true);
+    } else if (e.target.value === values.passwordCheck) {
+      setNoMatchPassword(false);
+    }
   };
 
   const handleAxiosSignup = async () => {
@@ -89,7 +87,6 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
         navigate('/');
       }
     } catch (error: any) {
-      setError(error);
       setPasswordCheck(true);
       setPasswordCheckMsg(error.response.data.password[0]);
     }
@@ -110,18 +107,13 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
         },
       );
       if (loadAxios.status === 200) {
-        setUniqueCheckMsg(loadAxios.data.message);
         setUniqueCheck(true);
+        setUniqueCheckMsg(loadAxios.data.message);
       }
     } catch (error: any) {
-      setUniqueCheckMsg(error.response.data.username[0]);
       setUniqueCheck(false);
+      setUniqueCheckMsg(error.response.data.username[0]);
     }
-  };
-
-  const handleLogout = () => {
-    sessionStorage.removeItem('token');
-    navigate('/');
   };
 
   useEffect(() => {
@@ -135,10 +127,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
 
   return {
     values,
-    submitting,
-    error,
     disappearMsg,
-    errorPassword,
     uniqueCheck,
     uniqueCheckMsg,
     passwordCheckMsg,
@@ -146,9 +135,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
     noMatchPassword,
     handleChange,
     handleSubmit,
-    handleLogout,
     handleCheckID,
-    changeBtnName,
-    handlePasswordChk
+    handlePasswordChk,
   };
 }

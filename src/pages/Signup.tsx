@@ -21,7 +21,6 @@ export default function Login() {
     handleChange,
     handleSubmit,
     handleCheckID,
-    changeBtnName,
   } = useSignup({
     initialValues: { username: '', password: '', passwordCheck: '' },
     onSubmit: () => {},
@@ -38,10 +37,7 @@ export default function Login() {
             name="username"
             placeholder="아이디"
             value={values.username}
-            onChange={(e) => {
-              handleChange(e);
-              changeBtnName(e);
-            }}
+            onChange={handleChange}
           />
           {disappearMsg ? <p className={`error font-${uniqueCheck ? 'g' : 'o'}`}>* {uniqueCheckMsg}</p> : null}
           <div className="userCheck">
@@ -60,7 +56,10 @@ export default function Login() {
             className="login-size login-input backColor-g"
             name="password"
             placeholder="패스워드"
-            onChange={handleChange}
+            onChange={(e) => {
+              handleChange(e);
+              handlePasswordChk(e);
+            }}
           />
           {disappearMsg && passwordCheck ? <p className="font-o error">* {passwordCheckMsg}</p> : null}
         </div>
@@ -71,8 +70,8 @@ export default function Login() {
             name="passwordCheck"
             placeholder="패스워드 확인"
             onChange={(e) => {
-              handlePasswordChk(e);
               handleChange(e);
+              handlePasswordChk(e);
             }}
           />
           {noMatchPassword && <p className="font-o error">* 비밀번호가 일치하지 않습니다.</p>}
@@ -81,9 +80,9 @@ export default function Login() {
         <button
           type="submit"
           className={`login-size login-btn ${
-            uniqueCheck && disappearMsg && !noMatchPassword ? 'backColor-1stg' : 'backColor-dg'
+            values.password === values.passwordCheck ? 'backColor-1stg' : 'backColor-dg'
           }`}
-          disabled={!(uniqueCheck && disappearMsg && !noMatchPassword)}
+          disabled={values.password !== values.passwordCheck}
           form="signup"
         >
           회원가입
