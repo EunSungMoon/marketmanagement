@@ -1,6 +1,7 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
 import axios, { AxiosError } from 'axios';
+import apiSwagger from '../models/apiSwagger.json';
 
 export interface validateValues {
   username: string;
@@ -32,7 +33,7 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
   const handleAxiosLogin = async () => {
     try {
       const loadData = await axios.post(
-        'http://15.164.62.156:8000/api/login/',
+        `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/user/login/`,
         {
           username: values.username,
           password: values.password,

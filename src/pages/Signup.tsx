@@ -1,38 +1,31 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable @typescript-eslint/no-empty-function */
-import React, { useState } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import useSignup from '../hooks/useSignup';
 import logo from '../styles/images/logo.png';
-import validate from '../models/vaildate';
 
 export default function Login() {
   const navigate = useNavigate();
-  const [noMatchPassword, setNoMatchPassword] = useState(false);
-  const [passwordCheck, setPasswordCheck] = useState('');
 
   const {
     values,
-    errors,
-    errorUser,
-    checkID,
-    errorPassword,
+    disappearMsg,
+    uniqueCheck,
+    uniqueCheckMsg,
+    passwordCheckMsg,
+    passwordCheck,
+    noMatchPassword,
+    handlePasswordChk,
     handleChange,
     handleSubmit,
     handleCheckID,
     changeBtnName,
-    handlePassword,
   } = useSignup({
     initialValues: { username: '', password: '', passwordCheck: '' },
     onSubmit: () => {},
-    validate,
   });
-
-  const handlePasswordChk = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setNoMatchPassword(e.target.value !== values.password);
-    setPasswordCheck(e.target.value);
-  };
 
   return (
     <main id="joinMain" className="container flex">
@@ -50,21 +43,14 @@ export default function Login() {
               changeBtnName(e);
             }}
           />
-          {errorUser ? (
-            checkID ? (
-              <p className="font-g error">*사용할 수 있는 아이디(ID)입니다.</p>
-            ) : (
-              <p className="font-o error">*사용할 수 없는 아이디(ID)입니다.</p>
-            )
-          ) : null}
-          {errorUser && values.username === '' && <p className="font-o error">{errors.username}</p>}
+          {disappearMsg ? <p className={`error font-${uniqueCheck ? 'g' : 'o'}`}>* {uniqueCheckMsg}</p> : null}
           <div className="userCheck">
             <button
               type="button"
               onClick={handleCheckID}
-              className={`userCheckBtn ${checkID && errorUser ? 'backColor-m' : 'backColor-dg'}`}
+              className={`userCheckBtn ${uniqueCheck && disappearMsg ? 'backColor-m' : 'backColor-dg'}`}
             >
-              {checkID && errorUser ? '확인완료' : '중복확인'}
+              {uniqueCheck && disappearMsg ? '확인완료' : '중복확인'}
             </button>
           </div>
         </div>
@@ -74,15 +60,9 @@ export default function Login() {
             className="login-size login-input backColor-g"
             name="password"
             placeholder="패스워드"
-            onChange={(e) => {
-              handleChange(e);
-              handlePassword(e);
-            }}
+            onChange={handleChange}
           />
-          {errorPassword && values.password.length < 8 && (
-            <p className="font-o error">*8자 이상의 패스워드를 사용해야 합니다.</p>
-          )}
-          {errorPassword && errors.password && <p className="font-o error">{errors.password}</p>}
+          {disappearMsg && passwordCheck ? <p className="font-o error">* {passwordCheckMsg}</p> : null}
         </div>
         <div className="idWrap">
           <input
@@ -95,16 +75,15 @@ export default function Login() {
               handleChange(e);
             }}
           />
-          {errorPassword && errors.passwordCheck && <p className="font-o error">{errors.passwordCheck}</p>}
-          {noMatchPassword && <p className="font-o error">*비밀번호가 일치하지 않습니다.</p>}
+          {noMatchPassword && <p className="font-o error">* 비밀번호가 일치하지 않습니다.</p>}
           <p className="font-g pwInfo">비밀번호는 8개 이상의 영문자/숫자/특수문자를 사용합니다.</p>
         </div>
         <button
           type="submit"
           className={`login-size login-btn ${
-            checkID && errorUser && values.passwordCheck && !noMatchPassword ? 'backColor-1stg' : 'backColor-dg'
+            uniqueCheck && disappearMsg && !noMatchPassword ? 'backColor-1stg' : 'backColor-dg'
           }`}
-          disabled={!(checkID && errorUser && values.passwordCheck && !noMatchPassword)}
+          disabled={!(uniqueCheck && disappearMsg && !noMatchPassword)}
           form="signup"
         >
           회원가입
