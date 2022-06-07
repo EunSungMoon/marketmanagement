@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
-import axios, { AxiosError } from 'axios';
+import axios from 'axios';
 import apiSwagger from '../models/apiSwagger.json';
 
 export interface validateValues {
@@ -16,7 +16,6 @@ export interface initValues {
 export default function useLogin({ initialValues, onSubmit }: initValues) {
   const [values, setValues] = useState(initialValues);
   const [submitting, setSubmitting] = useState(false);
-  const [error, setError] = useState<AxiosError>();
   const [loginFail, setLoginFail] = useState(false);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -50,7 +49,6 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
         window.location.replace('/main');
       }
     } catch (error: any) {
-      setError(error);
       setLoginFail(true);
     }
   };
@@ -66,7 +64,6 @@ export default function useLogin({ initialValues, onSubmit }: initValues) {
   return {
     values,
     submitting,
-    error,
     loginFail,
     handleChange,
     handleSubmit,
