@@ -6,7 +6,6 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import { BsBookmark } from 'react-icons/bs';
-import { FiMapPin } from 'react-icons/fi';
 import { AiOutlineCaretLeft, AiOutlineCaretDown, AiOutlineFileExcel, AiOutlineInfoCircle } from 'react-icons/ai';
 import {
   Box,
@@ -22,43 +21,35 @@ import {
 } from '@mui/material';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
 import apiSwagger from '../models/apiSwagger.json';
-import ModalComponent from '../component/ModalComponent';
 
-interface reagentType {
+interface productType {
   serial: string;
-  open: string;
-  open_date: string;
-  date: string;
-  reagent_name: string;
-  cat_no: string;
   location: string;
-  company: number;
+  unit: string;
+  in_date: string;
+  date: string;
   amount: string;
-  floor: string;
-  owner: string;
-  confirmer: string;
-  condition: string;
-  extra: string;
+  product_name: string;
+  sold_date:string
 }
 
 type paramsIp = {
   id: string;
 };
 
-function createData(name: string, total: number, waste: number, usable: number, reagent_list: Array<reagentType>) {
+function createData(name:string, unit_product: string, total: number, waste: number, product_list: Array<productType>) {
   return {
     name,
+    unit_product,
     total,
     waste,
-    usable,
-    reagent_list,
+    product_list,
   };
 }
 
 function Row(props: { list: ReturnType<typeof createData> }) {
   const { list } = props;
   const [open, setOpen] = useState(false);
-  const { id } = useParams<paramsIp>();
 
   const handleDate = (paraDate1: string, paraDate2: string) => {
     const dateNum1 = new Date(paraDate1);
@@ -92,7 +83,7 @@ function Row(props: { list: ReturnType<typeof createData> }) {
         </TableCell>
         <TableCell>{list.total}</TableCell>
         <TableCell>{list.waste}</TableCell>
-        <TableCell>{list.usable}</TableCell>
+        <TableCell>{list.unit_product}</TableCell>
         <TableCell>
           <IconButton aria-label="expand row">
             {open ? <AiOutlineCaretDown className="font-b" /> : <AiOutlineCaretLeft className="font-b" />}
@@ -107,41 +98,27 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                 <TableHead>
                   <TableRow>
                     <TableCell className="font-dg white-space" style={{ width: '18%' }}>
-                      관리번호
+                      입고번호
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '12%' }}>
-                      Cat.
+                      입고일
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
                       유통기한
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
-                      개봉일자
+                      수량
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
-                      개봉 후 기한
+                      판매일
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
-                      제조사
-                    </TableCell>
-                    <TableCell className="font-dg white-space" style={{ width: '6%' }}>
-                      용량
-                    </TableCell>
-                    {id !== '1' && (
-                      <TableCell className="font-dg white-space" style={{ width: '6%' }}>
-                        보관위치
-                      </TableCell>
-                    )}
-                    <TableCell className="font-dg white-space" style={{ width: '9%' }}>
-                      담당자/확인자
-                    </TableCell>
-                    <TableCell className="font-dg white-space" style={{ width: '9%' }}>
-                      보관조건
+                      총 가격
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {list.reagent_list.map((historyRow) => (
+                  {list.product_list.map((historyRow) => (
                     <TableRow key={historyRow.serial}>
                       <TableCell className="font-dg" component="th" scope="row">
                         {historyRow.location !== '폐시약장' ? (
@@ -151,14 +128,14 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                           <>{historyRow.serial}</>
                         )}
                       </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.cat_no}
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
+                        {historyRow.in_date}
                       </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
                         {historyRow.date}
                       </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.extra ? (
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
+                        {/* {historyRow.extra ? (
                           <OverlayTrigger trigger="click" overlay={popover(historyRow.extra)}>
                             <button type="button" className="extra">
                               {historyRow.open}{' '}
@@ -169,29 +146,14 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                           </OverlayTrigger>
                         ) : (
                           historyRow.open
-                        )}
+                        )} */}
+                        {historyRow.amount}{historyRow.unit}
                       </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.open_date}
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
+                        {historyRow.sold_date}
                       </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.company}
-                      </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.amount}
-                      </TableCell>
-                      {id !== '1' && (
-                        <TableCell
-                          className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}
-                        >
-                          {historyRow.floor}
-                        </TableCell>
-                      )}
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.owner}/{historyRow.confirmer}
-                      </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.condition}°C
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
+                        총 판매량
                       </TableCell>
                     </TableRow>
                   ))}
@@ -212,17 +174,18 @@ export default function Board() {
   const [error, setError] = useState<AxiosError>();
   const [locationTitle, setLocationTitle] = useState([] as any);
   const [title, setTitle] = useState('');
-  const [mapImg, setMapImg] = useState('');
-  const [modalShow, setModalShow] = useState(false);
 
   const loadData = async () => {
     try {
       setLoading(true);
-      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/listdetail/${id}/`, {
-        headers: {
-          'Content-Type': 'application/json',
+      const loadData = await axios.get(
+        `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/listdetail/${id}/`,
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
         },
-      });
+      );
       setLists(loadData.data);
     } catch (error: any) {
       setError(error);
@@ -232,7 +195,7 @@ export default function Board() {
   const loadLocationAxios = async () => {
     try {
       setLoading(true);
-      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/storage/`, {
+      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/location/`, {
         headers: {
           'Content-Type': 'application/json',
         },
@@ -254,7 +217,7 @@ export default function Board() {
       const url = window.URL.createObjectURL(new Blob([loadData.data]));
       const link = document.createElement('a');
       link.href = url;
-      link.download = id === '1' ? '폐시약장.csv' : `${title}.csv`;
+      link.download = `${title}.csv`;
       link.click();
     } catch (error: any) {
       setError(error);
@@ -265,13 +228,14 @@ export default function Board() {
     if (!loading) {
       loadLocationAxios();
       loadData();
+
     }
-    if (loading && id !== '1') {
-      const idTostring = Number(id);
-      const key = locationTitle.find((list: any) => list.id === idTostring);
-      setTitle(key.name);
-      setMapImg(key.map);
-    }
+    if(loading){
+    const idTostring = Number(id);
+    const key = locationTitle.find((list: any) => list.id === idTostring);
+    setTitle(key.name)
+  }
+
     return () => setLoading(false);
   }, [id, locationTitle]);
 
@@ -283,7 +247,7 @@ export default function Board() {
       <div className="flex-start">
         <h2 className="locationTitle">
           <BsBookmark />
-          {id === '1' ? ' 폐시약장' : ` ${title}`}
+          {' '}{title}
         </h2>
         <button
           type="button"
@@ -293,15 +257,6 @@ export default function Board() {
         >
           <AiOutlineFileExcel />
         </button>
-        <button type="button" className="export backColor-w" title="약도보기" onClick={() => setModalShow(true)}>
-          <FiMapPin />
-        </button>
-        <ModalComponent
-          show={modalShow}
-          title={id === '1' ? ' 폐시약장' : ` ${title}`}
-          img={id === '1' ? `${apiSwagger.url}:${apiSwagger.port}/media/bulk/map/1.PNG` : `${mapImg}`}
-          onHide={() => setModalShow(false)}
-        />
       </div>
 
       <TableContainer component={Paper} className="customTable">
@@ -311,7 +266,7 @@ export default function Board() {
               <TableCell className="productName white-space">품목명</TableCell>
               <TableCell className="totalProduct white-space">총 재고량</TableCell>
               <TableCell className="dateProduct white-space">유통기한 지난 재고량</TableCell>
-              <TableCell className="dateProduct white-space">사용 가능한 재고량</TableCell>
+              <TableCell className="dateProduct white-space">소비자 가격(단위가격)</TableCell>
               <TableCell />
             </TableRow>
           </TableHead>
