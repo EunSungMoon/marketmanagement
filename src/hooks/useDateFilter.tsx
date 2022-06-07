@@ -36,10 +36,10 @@ export default function useDateFilter({ initialValue, onSubmit }: initValues) {
   const handleAxios = async () => {
     try {
       const loadData = await axios.post(
-        `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/datefilter/`,
+        `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/revenue/`,
         {
           start: values.start,
-          end: values.end
+          end: values.end,
         },
         {
           headers: {
@@ -47,13 +47,13 @@ export default function useDateFilter({ initialValue, onSubmit }: initValues) {
           },
         },
       );
-      setLists(loadData.data)
+      setLists(loadData.data);
     } catch (error: any) {
       setErrors(error);
     }
   };
 
-  useEffect(() => {        
+  useEffect(() => {
     if (submitting) {
       handleAxios();
       onSubmit(values);

@@ -18,25 +18,16 @@ import {
   Paper,
 } from '@mui/material';
 import { Popover, OverlayTrigger } from 'react-bootstrap';
-import apiSwagger from '../models/apiSwagger.json';
-import ModalComponent from '../component/ModalComponent';
 
-export interface reagentType {
+export interface productType {
   serial: string;
-  open: string;
-  open_date: string;
-  date: string;
-  reagent_name: string;
-  cat_no: string;
   location: string;
-  company: number;
+  unit: string;
+  in_date: string;
+  date: string;
   amount: string;
-  floor: string;
-  owner: string;
-  confirmer: string;
-  condition: string;
-  map: string;
-  extra: string;
+  product_name: string;
+  sold_date: string;
 }
 
 export type paramsIp = {
@@ -45,26 +36,23 @@ export type paramsIp = {
 
 export function createData(
   name: string,
+  unit_product: string,
   total: number,
   waste: number,
-  usable: number,
-  reagent_list: Array<reagentType>,
+  product_list: Array<productType>,
 ) {
   return {
     name,
+    unit_product,
     total,
     waste,
-    usable,
-    reagent_list,
+    product_list,
   };
 }
 
 export function Row(props: { list: ReturnType<typeof createData> }) {
   const { list } = props;
   const [open, setOpen] = useState(false);
-  const [modalShow, setModalShow] = useState(false);
-  const [title, setTitle] = useState('');
-  const [mapImg, setMapImg] = useState('');
 
   const handleDate = (paraDate1: string, paraDate2: string) => {
     const dateNum1 = new Date(paraDate1);
@@ -98,7 +86,7 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
         </TableCell>
         <TableCell>{list.total}</TableCell>
         <TableCell>{list.waste}</TableCell>
-        <TableCell>{list.usable}</TableCell>
+        <TableCell>{list.unit_product}</TableCell>
         <TableCell>
           <IconButton aria-label="expand row">
             {open ? <AiOutlineCaretDown className="font-b" /> : <AiOutlineCaretLeft className="font-b" />}
@@ -113,39 +101,27 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
                 <TableHead>
                   <TableRow>
                     <TableCell className="font-dg white-space" style={{ width: '18%' }}>
-                      관리번호
+                      입고번호
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '12%' }}>
-                      Cat.
+                      입고일
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
                       유통기한
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
-                      개봉일자
+                      수량
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
-                      개봉 후 기한
+                      판매일
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
-                      제조사
-                    </TableCell>
-                    <TableCell className="font-dg white-space" style={{ width: '6%' }}>
-                      용량
-                    </TableCell>
-                    <TableCell className="font-dg white-space" style={{ width: '6%' }}>
-                      보관위치
-                    </TableCell>
-                    <TableCell className="font-dg white-space" style={{ width: '9%' }}>
-                      담당자/확인자
-                    </TableCell>
-                    <TableCell className="font-dg white-space" style={{ width: '9%' }}>
-                      보관조건
+                      총 가격
                     </TableCell>
                   </TableRow>
                 </TableHead>
                 <TableBody>
-                  {list.reagent_list.map((historyRow) => (
+                  {list.product_list.map((historyRow) => (
                     <TableRow key={historyRow.serial}>
                       <TableCell className="font-dg" component="th" scope="row">
                         {historyRow.location !== '폐시약장' ? (
@@ -155,14 +131,14 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
                           <>{historyRow.serial}</>
                         )}
                       </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.cat_no}
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
+                        {historyRow.in_date}
                       </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
                         {historyRow.date}
                       </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.extra ? (
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
+                        {/* {historyRow.extra ? (
                           <OverlayTrigger trigger="click" overlay={popover(historyRow.extra)}>
                             <button type="button" className="extra">
                               {historyRow.open}{' '}
@@ -173,37 +149,15 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
                           </OverlayTrigger>
                         ) : (
                           historyRow.open
-                        )}
-                      </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.open_date}
-                      </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.company}
-                      </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
+                        )} */}
                         {historyRow.amount}
+                        {historyRow.unit}
                       </TableCell>
-                      <TableCell
-                        className={`font-dg white-space goToMap ${handleDate(historyRow.date, historyRow.open_date)}`}
-                        title="약도보기"
-                      >
-                        <span
-                          onClick={() => {
-                            setModalShow(true);
-                            setTitle(historyRow.location);
-                            setMapImg(historyRow.map);
-                          }}
-                        >
-                          {historyRow.location}
-                        </span>
-                        {historyRow.location !== '폐시약장' ? `-${historyRow.floor}` : ''}
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
+                        {historyRow.sold_date}
                       </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.owner}/{historyRow.confirmer}
-                      </TableCell>
-                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.open_date)}`}>
-                        {historyRow.condition}°C
+                      <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
+                        총 판매량
                       </TableCell>
                     </TableRow>
                   ))}
@@ -213,12 +167,6 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
           </Collapse>
         </TableCell>
       </TableRow>
-      <ModalComponent
-        show={modalShow}
-        title={title}
-        img={`${apiSwagger.url}:${apiSwagger.port}${mapImg}`}
-        onHide={() => setModalShow(false)}
-      />
     </>
   );
 }
@@ -234,7 +182,7 @@ export default function CollapseTableComponent(props: any) {
             <TableCell className="productName white-space">품목명</TableCell>
             <TableCell className="totalProduct white-space">총 재고량</TableCell>
             <TableCell className="dateProduct white-space">유통기한 지난 재고량</TableCell>
-            <TableCell className="dateProduct white-space">사용 가능한 재고량</TableCell>
+            <TableCell className="dateProduct white-space">소비자 가격(단위가격)</TableCell>
             <TableCell />
           </TableRow>
         </TableHead>

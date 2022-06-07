@@ -30,14 +30,20 @@ interface productType {
   date: string;
   amount: string;
   product_name: string;
-  sold_date:string
+  sold_date: string;
 }
 
 type paramsIp = {
   id: string;
 };
 
-function createData(name:string, unit_product: string, total: number, waste: number, product_list: Array<productType>) {
+function createData(
+  name: string,
+  unit_product: string,
+  total: number,
+  waste: number,
+  product_list: Array<productType>,
+) {
   return {
     name,
     unit_product,
@@ -147,7 +153,8 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                         ) : (
                           historyRow.open
                         )} */}
-                        {historyRow.amount}{historyRow.unit}
+                        {historyRow.amount}
+                        {historyRow.unit}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
                         {historyRow.sold_date}
@@ -228,13 +235,12 @@ export default function Board() {
     if (!loading) {
       loadLocationAxios();
       loadData();
-
     }
-    if(loading){
-    const idTostring = Number(id);
-    const key = locationTitle.find((list: any) => list.id === idTostring);
-    setTitle(key.name)
-  }
+    if (loading) {
+      const idTostring = Number(id);
+      const key = locationTitle.find((list: any) => list.id === idTostring);
+      setTitle(key.name);
+    }
 
     return () => setLoading(false);
   }, [id, locationTitle]);
@@ -246,8 +252,7 @@ export default function Board() {
     <main id="board" className="container">
       <div className="flex-start">
         <h2 className="locationTitle">
-          <BsBookmark />
-          {' '}{title}
+          <BsBookmark /> {title}
         </h2>
         <button
           type="button"

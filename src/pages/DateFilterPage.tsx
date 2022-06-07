@@ -45,7 +45,7 @@ export default function DateFilterPage() {
     <main id="board" className="container dateFilter">
       <div className="flex-space-between titleWrap">
         <h2 className="datefilterTitle">
-          <BsBookmark /> 개봉현황
+          <BsBookmark /> 매출현황 확인하기
         </h2>
         <form id="dateFilter" className="flex-center" onSubmit={handleSubmit}>
           <DatePicker
