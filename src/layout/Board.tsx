@@ -6,7 +6,7 @@ import React, { useState, useEffect } from 'react';
 import { useParams, Link } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import { BsBookmark } from 'react-icons/bs';
-import { AiOutlineCaretLeft, AiOutlineCaretDown, AiOutlineFileExcel, AiOutlineInfoCircle } from 'react-icons/ai';
+import { AiOutlineCaretLeft, AiOutlineCaretDown, AiOutlineFileExcel } from 'react-icons/ai';
 import {
   Box,
   Collapse,
@@ -19,7 +19,6 @@ import {
   TableRow,
   Paper,
 } from '@mui/material';
-import { Popover, OverlayTrigger } from 'react-bootstrap';
 import apiSwagger from '../models/apiSwagger.json';
 
 interface productType {
@@ -73,13 +72,6 @@ function Row(props: { list: ReturnType<typeof createData> }) {
     }
     return '';
   };
-
-  const popover = (extra: string) => (
-    <Popover id="popover-basic">
-      <Popover.Header as="h3">비고</Popover.Header>
-      <Popover.Body>{extra}</Popover.Body>
-    </Popover>
-  );
 
   return (
     <>
@@ -141,18 +133,6 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                         {historyRow.date}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
-                        {/* {historyRow.extra ? (
-                          <OverlayTrigger trigger="click" overlay={popover(historyRow.extra)}>
-                            <button type="button" className="extra">
-                              {historyRow.open}{' '}
-                              <span className="extraIcon">
-                                <AiOutlineInfoCircle />
-                              </span>
-                            </button>
-                          </OverlayTrigger>
-                        ) : (
-                          historyRow.open
-                        )} */}
                         {historyRow.amount}
                         {historyRow.unit}
                       </TableCell>

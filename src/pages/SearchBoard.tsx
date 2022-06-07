@@ -14,7 +14,7 @@ export default function SearchBoard() {
   const handleAxios = async () => {
     try {
       setLoading(true);
-      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/search/${values}`, {
+      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/search/${values}`, {
         headers: {
           'Content-Type': 'application/json',
         },
