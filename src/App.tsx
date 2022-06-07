@@ -26,7 +26,7 @@ function App() {
                 <Route path="/main" element={<Main />} />
                 <Route path="/list/:id" element={<Board />} />
                 <Route path="/enroll" element={<EnrollPage />} />
-                <Route path="/datefilter/" element={<DateFilterPage />} />
+                <Route path="/list/2/" element={<DateFilterPage />} />
                 <Route path="/update/:serial" element={<UpdatePage />} />
                 <Route path="/confirm/:serial" element={<ConfirmPage />} />
                 <Route path="/search/:values" element={<SearchBoard />} />

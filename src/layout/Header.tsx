@@ -1,19 +1,22 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/control-has-associated-label */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Nav, Navbar, Container, Offcanvas } from 'react-bootstrap';
 import { GiHamburgerMenu } from 'react-icons/gi';
 import { BsSearch } from 'react-icons/bs';
-import { BiEdit, BiCalendar } from 'react-icons/bi';
+import { BiEdit } from 'react-icons/bi';
 import { Link, useNavigate } from 'react-router-dom';
+import axios, { AxiosError } from 'axios';
 import logo from '../styles/images/textLogo.png';
-import useGet from '../hooks/useGet';
 import { jsonType } from '../component/Dropdown';
 import apiSwagger from '../models/apiSwagger.json';
 
 export default function Header() {
   const [values, setValues] = useState('');
+  const [lists, setLists] = useState([] as any);
+  const [locations, setLocations] = useState([] as any);
+  const [error, setError] = useState<AxiosError>();
   const navigate = useNavigate();
 
   const handleLogout = () => {
@@ -21,13 +24,27 @@ export default function Header() {
     document.location.href = '/';
   };
 
-  const { lists } = useGet({
-    method: 'GET',
-    url: `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/storage/`,
-    headers: {
-      'Content-Type': 'application/json',
-    },
-  });
+  const loadTabName = async () => {
+    try {
+      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/location/`, {
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
+      const diff = loadData.data.slice(0, 2);
+      const category = loadData.data.slice(2);
+      setLocations(category);
+      setLists(diff);
+    } catch (error: any) {
+      setError(error);
+    }
+  };
+  useEffect(() => {
+    loadTabName();
+  }, []);
+
+  if (error) return <div>에러가 발생했습니다</div>;
+
   const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     e.preventDefault();
     setValues(e.target.value);
@@ -47,6 +64,7 @@ export default function Header() {
       navigate(`/search/${values}`);
     }
   };
+
   return (
     <header id="header" className="backColor-w">
       <div className="container">
@@ -83,11 +101,6 @@ export default function Header() {
                     <BiEdit />
                   </button>
                 </Link>
-                <Link className="txtDeco-o margin-percent " to="/datefilter/">
-                  <button type="button" className="enrollBtn backColor-w" title="개봉현황 확인하기">
-                    <BiCalendar />
-                  </button>
-                </Link>
               </div>
 
               <Navbar.Toggle aria-controls="offcanvasNavbar" className="mainColor">
@@ -104,6 +117,19 @@ export default function Header() {
                 </Offcanvas.Header>
                 <Offcanvas.Body>
                   <Nav className="justify-content-end flex-grow-1 pe-3">
+                    {locations.map((location: jsonType) => (
+                      <Link
+                        to={{
+                          pathname: `/list/${location.id}/`,
+                        }}
+                        key={location.name}
+                        className="txtDeco-m"
+                      >
+                        <Nav.Item>
+                          <Navbar.Text className="nav-link txtDeco-m">{location.name}</Navbar.Text>
+                        </Nav.Item>
+                      </Link>
+                    ))}
                     {lists.map((list: jsonType) => (
                       <Link
                         to={{
@@ -117,16 +143,6 @@ export default function Header() {
                         </Nav.Item>
                       </Link>
                     ))}
-                    <Link
-                      to={{
-                        pathname: '/list/1/',
-                      }}
-                      className="txtDeco-m"
-                    >
-                      <Nav.Item>
-                        <Navbar.Text className="nav-link txtDeco-m">폐시약장</Navbar.Text>
-                      </Nav.Item>
-                    </Link>
                     <button type="button" className="logout-position logout-button backColor-w" onClick={handleLogout}>
                       로그아웃
                     </button>
