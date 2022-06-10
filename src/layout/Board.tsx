@@ -36,16 +36,10 @@ type paramsIp = {
   id: string;
 };
 
-function createData(
-  name: string,
-  unit_product: string,
-  total: number,
-  waste: number,
-  product_list: Array<productType>,
-) {
+function createData(name: string, unit_price: string, total: number, waste: number, product_list: Array<productType>) {
   return {
     name,
-    unit_product,
+    unit_price,
     total,
     waste,
     product_list,
@@ -55,6 +49,7 @@ function createData(
 function Row(props: { list: ReturnType<typeof createData> }) {
   const { list } = props;
   const [open, setOpen] = useState(false);
+  const { id } = useParams<paramsIp>();
 
   const handleDate = (paraDate1: string, paraDate2: string) => {
     const dateNum1 = new Date(paraDate1);
@@ -73,15 +68,21 @@ function Row(props: { list: ReturnType<typeof createData> }) {
     return '';
   };
 
+  const handleAllAmount = (unit: string, amount: string) => {
+    const unitNum = Number(unit);
+    const amountNum = Number(amount);
+    return (unitNum * amountNum).toLocaleString();
+  };
+
   return (
     <>
       <TableRow sx={{ '& > *': { borderBottom: 'unset' } }} onClick={() => setOpen(!open)}>
         <TableCell className="white-space" component="th" scope="row">
           {list.name}
         </TableCell>
-        <TableCell>{list.total}</TableCell>
+        <TableCell>{list.total.toLocaleString()}</TableCell>
         <TableCell>{list.waste}</TableCell>
-        <TableCell>{list.unit_product}</TableCell>
+        <TableCell>{list.unit_price.toLocaleString()}원</TableCell>
         <TableCell>
           <IconButton aria-label="expand row">
             {open ? <AiOutlineCaretDown className="font-b" /> : <AiOutlineCaretLeft className="font-b" />}
@@ -119,7 +120,7 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                   {list.product_list.map((historyRow) => (
                     <TableRow key={historyRow.serial}>
                       <TableCell className="font-dg" component="th" scope="row">
-                        {historyRow.location !== '폐시약장' ? (
+                        {id !== '1' && id !== '2' ? (
                           <Link to={`/update/${historyRow.serial}/`}>{historyRow.serial}</Link>
                         ) : (
                           // eslint-disable-next-line react/jsx-no-useless-fragment
@@ -133,14 +134,14 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                         {historyRow.date}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
-                        {historyRow.amount}
+                        {historyRow.amount.toLocaleString()}
                         {historyRow.unit}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
                         {historyRow.sold_date}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
-                        총 판매량
+                        {handleAllAmount(list.unit_price, historyRow.amount)}원
                       </TableCell>
                     </TableRow>
                   ))}
