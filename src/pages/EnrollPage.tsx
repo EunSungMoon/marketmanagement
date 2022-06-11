@@ -1,49 +1,23 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jsx-a11y/label-has-associated-control */
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import DatePicker from 'react-datepicker';
 import { ko } from 'date-fns/esm/locale';
 import 'react-datepicker/dist/react-datepicker.css';
-import axios, { AxiosError } from 'axios';
 import dayjs from 'dayjs';
 import { BsX } from 'react-icons/bs';
 import { Label, Input } from '../component/FormComponents';
 import { Dropdown, SelectBox } from '../component/Dropdown';
 import useAdd from '../hooks/useAdd';
-import apiSwagger from '../models/apiSwagger.json';
 
 export default function EnrollPage() {
-  const [reagent, setReagent] = useState([] as any);
-  const [company, setCompany] = useState([] as any);
-  const [location, setLocation] = useState([] as any);
-  const [floor, setFloor] = useState([] as any);
-  const [worker, setWorker] = useState([] as any);
-  const [loading, setLoading] = useState(false);
-  const [error, setError] = useState<AxiosError>();
   const [disabled, setDisabled] = useState(false);
+  const [inDateDisabled, setInDateDisabled] = useState(false);
   const [date, setDate] = useState<any>();
+  const [inDate, setInDate] = useState<any>();
   const [stringDate, setStringDate] = useState('');
+  const [stringInDate, setStringInDate] = useState('');
   const today = new Date();
-
-  const loadData = async () => {
-    try {
-      setLoading(true);
-      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/select/`);
-      setReagent(loadData.data.reagent);
-      setCompany(loadData.data.company);
-      setLocation(loadData.data.location);
-      setFloor(loadData.data.floor);
-      setWorker(loadData.data.worker);
-    } catch (error: any) {
-      setError(error);
-    }
-    setLoading(false);
-  };
-
-  useEffect(() => {
-    loadData();
-    return () => setLoading(false);
-  }, []);
 
   const handleDatePicker = (value: Date) => {
     setDate(value);
@@ -53,27 +27,30 @@ export default function EnrollPage() {
     setStringDate(stringToDateFormat);
   };
 
-  const { values, setValues, handleChange, handleSubmit } = useAdd({
+  const handleInDatePicker = (value: Date) => {
+    setInDate(value);
+    const stringToDate = value.toString();
+    const stringToDateFormat = dayjs(stringToDate).format('YYYY-MM-DD');
+    values.in_date = stringToDateFormat;
+    setStringInDate(stringToDateFormat);
+  };
+
+  const { values, error, product, unit, location, setValues, handleChange, handleSubmit } = useAdd({
     initialValue: {
-      reagent_name: '',
-      serial: '',
-      date: stringDate,
+      product_name: '',
       location: '',
-      company: '',
-      cat_no: '',
+      unit: '',
+      serial: '',
       amount: '',
-      floor: '',
-      owner: '',
-      confirmer: '',
-      condition: '',
+      in_date: stringInDate,
+      date: stringDate,
     },
     // eslint-disable-next-line @typescript-eslint/no-empty-function
     onSubmit: () => {},
   });
 
-  if (loading) return null;
-  if (error) return null;
-
+  if (error) return <div>에러가 발생했습니다.</div>;
+  
   return (
     <main id="enrollMain" className="container mainWrap">
       <div className="whiteBox backColor-w w-100">
@@ -83,27 +60,79 @@ export default function EnrollPage() {
             <Label ratio="label-ratio" use="productName" labelName="품목명" />
             <Dropdown
               inputId="productName"
-              propmt="품목 선택하기"
-              name="reagent_name"
-              options={reagent}
+              propmt="품목명 선택하기"
+              name="product_name"
+              options={product}
               width="w-100"
               onChange={handleChange}
               defaultValue=""
             />
           </div>
           <div className="inputWrap input-flex w-ratio marginAuto">
-            <Label ratio="label-ratio" use="serialNumber" labelName="관리번호" />
-            <Input
-              id="serialNumber"
-              propmt="시리얼 넘버 입력하기"
-              name="serial"
+            <Label ratio="label-ratio" use="category" labelName="분류" />
+            <SelectBox
+              inputId="category"
+              name="location"
+              options={location}
               width="w-100"
-              onchange={handleChange}
+              onChange={handleChange}
+              defaultValue="분류 선택하기"
             />
           </div>
           <div className="inputWrap input-flex w-ratio marginAuto">
-            <Label ratio="label-ratio" use="catNumber" labelName="Cat." />
-            <Input id="catNumber" propmt="Cat. 입력하기" name="cat_no" width="w-100" onchange={handleChange} />
+            <Label ratio="label-ratio" use="unitSelect" labelName="단위" />
+            <SelectBox
+              inputId="unitSelect"
+              name="unit"
+              options={unit}
+              width="w-100"
+              onChange={handleChange}
+              defaultValue="단위 선택하기"
+            />
+          </div>
+          <div className="inputWrap input-flex w-ratio marginAuto">
+            <Label ratio="label-ratio" use="serialNumber" labelName="입고번호" />
+            <Input id="serialNumber" propmt="입고번호 입력하기" name="serial" width="w-100" onchange={handleChange} />
+          </div>
+
+          <div className="inputWrap input-flex w-ratio marginAuto">
+            <Label ratio="label-ratio" use="amountInput" labelName="수량" />
+            <Input id="amountInput" propmt="수량 입력하기" name="amount" width="w-100" onchange={handleChange} />
+          </div>
+          <div className="inputWrap input-flex w-ratio marginAuto">
+            <Label ratio="label-ratio" use="datepicker" labelName="입고일" />
+            <div className="w-100 position">
+              <DatePicker
+                className="dday-input"
+                name="in_date"
+                placeholderText="입고일 선택하기"
+                selected={inDate}
+                onChange={(value: Date, e: React.ChangeEvent<HTMLInputElement>) => {
+                  handleInDatePicker(value);
+                  handleChange(e);
+                  setInDateDisabled(true);
+                }}
+                minDate={today}
+                dateFormat="yyyy-MM-dd"
+                locale={ko}
+                showMonthDropdown
+                showYearDropdown
+                dropdownMode="select"
+                autoComplete="off"
+                disabled={inDateDisabled}
+              />
+              <button
+                type="button"
+                className="clearBtn enroll-clear-position"
+                onClick={() => {
+                  setValues({ ...values, in_date: '' });
+                  setDate('');
+                  setInDateDisabled(false);
+                }}
+              >
+                <BsX />
+              </button>
+            </div>
           </div>
           <div className="inputWrap input-flex w-ratio marginAuto">
             <Label ratio="label-ratio" use="datepicker" labelName="유통기한" />
@@ -129,7 +158,7 @@ export default function EnrollPage() {
               />
               <button
                 type="button"
-                className='clearBtn enroll-clear-position'
+                className="clearBtn enroll-clear-position"
                 onClick={() => {
                   setValues({ ...values, date: '' });
                   setDate('');
@@ -139,71 +168,6 @@ export default function EnrollPage() {
                 <BsX />
               </button>
             </div>
-          </div>
-          <div className="inputWrap input-flex w-ratio marginAuto">
-            <Label ratio="label-ratio" use="maker" labelName="제조사" />
-            <Dropdown
-              inputId="maker"
-              propmt="제조사 선택하기"
-              name="company"
-              options={company}
-              width="w-100"
-              onChange={handleChange}
-              defaultValue=""
-            />
-          </div>
-          <div className="inputWrap input-flex w-ratio marginAuto">
-            <Label ratio="label-ratio" use="capacity" labelName="용량" />
-            <Input id="capacity" propmt="입력하기" name="amount" width="w-100" onchange={handleChange} />
-          </div>
-          <div className="inputWrap input-flex w-ratio marginAuto">
-            <Label ratio="label-ratio" use="group" labelName="보관위치" />
-            <SelectBox
-              inputId="group"
-              name="location"
-              options={location}
-              width="halfWidth margin-right10"
-              onChange={handleChange}
-              defaultValue="시약장 선택하기"
-            />
-            <SelectBox
-              inputId="group"
-              name="floor"
-              options={floor}
-              width="halfWidth"
-              onChange={handleChange}
-              defaultValue="위치 선택하기"
-            />
-          </div>
-          <div className="inputWrap input-flex w-ratio marginAuto">
-            <Label ratio="label-ratio" use="worker" labelName="담당자/확인자" />
-            <SelectBox
-              inputId="worker"
-              name="owner"
-              options={worker}
-              width="halfWidth margin-right10"
-              onChange={handleChange}
-              defaultValue="담당자 선택하기"
-            />
-            <SelectBox
-              inputId="worker"
-              name="confirmer"
-              options={worker}
-              width="halfWidth"
-              onChange={handleChange}
-              defaultValue="확인자 선택하기"
-            />
-          </div>
-          <div className="inputWrap input-flex w-ratio marginAuto">
-            <Label ratio="conditionLabel-ratio" use="storageCondition" labelName="보관조건" />
-            <Input
-              id="storageCondition"
-              propmt="보관조건 입력하기"
-              name="condition"
-              width="quaterWidth"
-              onchange={handleChange}
-            />
-            °C
           </div>
         </form>
       </div>

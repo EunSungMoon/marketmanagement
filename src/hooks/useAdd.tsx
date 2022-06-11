@@ -2,21 +2,17 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import axios from 'axios';
+import axios, {AxiosError} from 'axios';
 import apiSwagger from '../models/apiSwagger.json';
 
 interface inputValues {
-  reagent_name: string;
-  serial: string;
-  date: string;
+  product_name: string;
   location: string;
-  company: string;
-  cat_no: string;
+  unit: string;
+  serial: string;
   amount: string;
-  floor: string;
-  owner: string;
-  confirmer: string;
-  condition: string;
+  in_date: string;
+  date: string;
 }
 
 interface initValues {
@@ -30,10 +26,17 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<AxiosError>();
+  const [product, setProduct] = useState([] as any);
+  const [unit, setUnit] = useState([] as any);
+  const [location, setLocation] = useState([] as any);
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name !== undefined) {
       setValues({ ...values, [name]: value });
+      console.log(values);
     }
   };
 
@@ -43,22 +46,84 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
     setValues(values);
   };
 
+    const loadProductData = async () => {
+    try {
+      setLoading(true);
+      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/product`);
+      setProduct(loadData.data);
+    } catch (error: any) {
+      setError(error);
+    }
+    setLoading(false);
+  };
+
+  const loadUnitData = async () => {
+    try {
+      setLoading(true);
+      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/unit`);
+      setUnit(loadData.data);
+    } catch (error: any) {
+      setError(error);
+    }
+    setLoading(false);
+  };
+
+  const loadLocationData = async () => {
+    try {
+      setLoading(true);
+      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/location`);
+      setLocation(loadData.data.slice(2));
+    } catch (error: any) {
+      setError(error);
+    }
+    setLoading(false);
+  };
+
+  useEffect(() => {
+    loadProductData();
+    loadUnitData();
+    loadLocationData();
+    return () => setLoading(false);
+  }, []);
+
+  const handleError = (x: any) => {
+    switch (x) {
+      case 'amount':
+        console.log('dd');
+        break;
+      case 'date':
+        console.log('dd');
+        break;
+      case 'in_date':
+        console.log('dd');
+        break;
+      case 'location':
+        console.log('dd');
+        break;
+      case 'product_name':
+        console.log('dd');
+        break;
+      case 'serial':
+        console.log('dd');
+        break;
+
+      default:
+        break;
+    }
+  };
+
   const handleAxios = async () => {
     try {
       const loadData = await axios.post(
-        `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/add/`,
+        `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/add/`,
         {
-          reagent_name: values.reagent_name,
-          serial: values.serial,
-          date: values.date,
+          product_name: values.product_name,
           location: values.location,
-          company: values.company,
-          cat_no: values.cat_no,
+          unit: values.unit,
+          serial: values.serial,
           amount: values.amount,
-          floor: values.floor,
-          owner: values.owner,
-          confirmer: values.confirmer,
-          condition: values.condition,
+          in_date: values.in_date,
+          date: values.date,
         },
         {
           headers: {
@@ -66,17 +131,21 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
           },
         },
       );
-      if (loadData.status === 201) {
-        navigate(`/confirm/${values.serial}/`);
-      }
+      // if (loadData.status === 201) {
+      //   navigate(`/confirm/${values.serial}/`);
+      // }
+      console.log(loadData.data);
     } catch (error: any) {
       setErrors(error);
-      const errorMsg=error.response.data;
-      if (errorMsg.date) {
-        alert('유통기한을 입력해주세요.');
-      } else {
-        alert(errorMsg.message);
-      }
+      console.log(error.response.data);
+      handleError(error.response.data);
+
+      // const errorMsg=error.response.data;
+      // if (errorMsg.date) {
+      //   alert('유통기한을 입력해주세요.');
+      // } else {
+      //   alert(errorMsg.message);
+      // }
     }
   };
 
@@ -90,8 +159,11 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
 
   return {
     values,
-    errors,
     submitting,
+    product,
+    unit,
+    location,
+    error,
     setValues,
     handleChange,
     handleSubmit,
