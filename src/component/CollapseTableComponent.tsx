@@ -21,7 +21,6 @@ import {
 export interface productType {
   serial: string;
   location: string;
-  unit: string;
   in_date: string;
   date: string;
   amount: string;
@@ -39,6 +38,7 @@ export function createData(
   total: number,
   waste: number,
   product_list: Array<productType>,
+  unit: string
 ) {
   return {
     name,
@@ -46,6 +46,7 @@ export function createData(
     total,
     waste,
     product_list,
+    unit
   };
 }
 
@@ -82,8 +83,8 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
         <TableCell component="th" scope="row">
           {list.name}
         </TableCell>
-        <TableCell>{list.total.toLocaleString()}</TableCell>
-        <TableCell>{list.waste}</TableCell>
+        <TableCell>{list.total.toLocaleString()}{list.unit}</TableCell>
+        <TableCell>{list.waste}{list.unit}</TableCell>
         <TableCell>{list.unit_price.toLocaleString()}원</TableCell>
         <TableCell>
           <IconButton aria-label="expand row">
@@ -108,10 +109,10 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
                       유통기한
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
-                      수량
+                      판매일
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
-                      판매일
+                      수량
                     </TableCell>
                     <TableCell className="font-dg white-space" style={{ width: '10%' }}>
                       총 가격
@@ -131,11 +132,11 @@ export function Row(props: { list: ReturnType<typeof createData> }) {
                         {historyRow.date}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
-                        {historyRow.amount.toLocaleString()}
-                        {historyRow.unit}
+                        {historyRow.sold_date}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
-                        {historyRow.sold_date}
+                        {historyRow.amount.toLocaleString()}
+                        {list.unit}
                       </TableCell>
                       <TableCell className={`font-dg white-space ${handleDate(historyRow.date, historyRow.date)}`}>
                         {handleAllAmount(list.unit_price, historyRow.amount)}원
