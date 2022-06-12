@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
@@ -24,7 +25,6 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
-  const [loading, setLoading] = useState(false);
   const [error, setError] = useState<AxiosError>();
   const [product, setProduct] = useState([] as any);
   const [location, setLocation] = useState([] as any);
@@ -44,30 +44,26 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
 
   const loadProductData = async () => {
     try {
-      setLoading(true);
       const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/product`);
       setProduct(loadData.data);
     } catch (error: any) {
       setError(error);
     }
-    setLoading(false);
   };
 
   const loadLocationData = async () => {
     try {
-      setLoading(true);
       const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/location`);
       setLocation(loadData.data.slice(2));
+      
     } catch (error: any) {
       setError(error);
     }
-    setLoading(false);
   };
 
   useEffect(() => {
     loadProductData();
     loadLocationData();
-    return () => setLoading(false);
   }, []);
 
   const handleAxios = async () => {
@@ -97,33 +93,21 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
       if (errorMsg.product_name) {
         alert('품목명을 확인해주세요.');
       }
-
       if (errorMsg.location) {
         alert('분류를 확인해주세요.');
       }
-
       if (errorMsg.serial) {
         alert('입고번호를 확인해주세요.');
       }
-
       if (errorMsg.amount) {
         alert('수량을 확인해주세요.');
       }
-
       if (errorMsg.in_date) {
         alert('입고일을 확인해주세요.');
       }
-
       if (errorMsg.date) {
         alert('유통기한을 확인해주세요.');
       }
-
-      // const errorMsg=error.response.data;
-      // if (errorMsg.date) {
-      //   alert('유통기한을 입력해주세요.');
-      // } else {
-      //   alert(errorMsg.message);
-      // }
     }
   };
 
