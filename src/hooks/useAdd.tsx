@@ -88,7 +88,6 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
         navigate(`/confirm/${values.serial}/`);
       }
     } catch (error: any) {
-
       const errorMsg = error.response.data;
       if (errorMsg.product_name) {
         alert('품목명을 확인해주세요.');

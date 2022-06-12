@@ -62,9 +62,10 @@ export default function useEdit({ initialValue, onSubmit }: initValues) {
         if (loadData.data.location === 1) {
           alert('폐기가 완료되었습니다.');
           navigate('/list/1/');
-        } else {
-          navigate(`/confirm/${serial}/`, { state: { data: 'update' } });
-        }
+        } 
+        // else {
+        //   navigate(`/confirm/${serial}/`, { state: { data: 'update' } });
+        // }
       }
     } catch (error: any) {
       setErrors(error);
