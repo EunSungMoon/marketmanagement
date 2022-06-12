@@ -35,11 +35,10 @@ export default function EnrollPage() {
     setStringInDate(stringToDateFormat);
   };
 
-  const { values, error, product, unit, location, setValues, handleChange, handleSubmit } = useAdd({
+  const { values, error, product, location, setValues, handleChange, handleSubmit } = useAdd({
     initialValue: {
       product_name: '',
       location: '',
-      unit: '',
       serial: '',
       amount: '',
       in_date: stringInDate,
@@ -50,7 +49,7 @@ export default function EnrollPage() {
   });
 
   if (error) return <div>에러가 발생했습니다.</div>;
-  
+
   return (
     <main id="enrollMain" className="container mainWrap">
       <div className="whiteBox backColor-w w-100">
@@ -77,17 +76,6 @@ export default function EnrollPage() {
               width="w-100"
               onChange={handleChange}
               defaultValue="분류 선택하기"
-            />
-          </div>
-          <div className="inputWrap input-flex w-ratio marginAuto">
-            <Label ratio="label-ratio" use="unitSelect" labelName="단위" />
-            <SelectBox
-              inputId="unitSelect"
-              name="unit"
-              options={unit}
-              width="w-100"
-              onChange={handleChange}
-              defaultValue="단위 선택하기"
             />
           </div>
           <div className="inputWrap input-flex w-ratio marginAuto">

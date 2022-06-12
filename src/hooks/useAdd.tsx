@@ -2,13 +2,12 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router';
-import axios, {AxiosError} from 'axios';
+import axios, { AxiosError } from 'axios';
 import apiSwagger from '../models/apiSwagger.json';
 
 interface inputValues {
   product_name: string;
   location: string;
-  unit: string;
   serial: string;
   amount: string;
   in_date: string;
@@ -22,21 +21,18 @@ interface initValues {
 
 export default function useAdd({ initialValue, onSubmit }: initValues) {
   const [values, setValues] = useState(initialValue);
-  const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
   const navigate = useNavigate();
 
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<AxiosError>();
   const [product, setProduct] = useState([] as any);
-  const [unit, setUnit] = useState([] as any);
   const [location, setLocation] = useState([] as any);
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     if (name !== undefined) {
       setValues({ ...values, [name]: value });
-      console.log(values);
     }
   };
 
@@ -46,22 +42,11 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
     setValues(values);
   };
 
-    const loadProductData = async () => {
+  const loadProductData = async () => {
     try {
       setLoading(true);
       const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/product`);
       setProduct(loadData.data);
-    } catch (error: any) {
-      setError(error);
-    }
-    setLoading(false);
-  };
-
-  const loadUnitData = async () => {
-    try {
-      setLoading(true);
-      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/unit`);
-      setUnit(loadData.data);
     } catch (error: any) {
       setError(error);
     }
@@ -81,36 +66,9 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
 
   useEffect(() => {
     loadProductData();
-    loadUnitData();
     loadLocationData();
     return () => setLoading(false);
   }, []);
-
-  const handleError = (x: any) => {
-    switch (x) {
-      case 'amount':
-        console.log('dd');
-        break;
-      case 'date':
-        console.log('dd');
-        break;
-      case 'in_date':
-        console.log('dd');
-        break;
-      case 'location':
-        console.log('dd');
-        break;
-      case 'product_name':
-        console.log('dd');
-        break;
-      case 'serial':
-        console.log('dd');
-        break;
-
-      default:
-        break;
-    }
-  };
 
   const handleAxios = async () => {
     try {
@@ -119,7 +77,6 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
         {
           product_name: values.product_name,
           location: values.location,
-          unit: values.unit,
           serial: values.serial,
           amount: values.amount,
           in_date: values.in_date,
@@ -131,14 +88,35 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
           },
         },
       );
-      // if (loadData.status === 201) {
-      //   navigate(`/confirm/${values.serial}/`);
-      // }
-      console.log(loadData.data);
+      if (loadData.status === 201) {
+        navigate(`/confirm/${values.serial}/`);
+      }
     } catch (error: any) {
-      setErrors(error);
-      console.log(error.response.data);
-      handleError(error.response.data);
+
+      const errorMsg = error.response.data;
+      if (errorMsg.product_name) {
+        alert('품목명을 확인해주세요.');
+      }
+
+      if (errorMsg.location) {
+        alert('분류를 확인해주세요.');
+      }
+
+      if (errorMsg.serial) {
+        alert('입고번호를 확인해주세요.');
+      }
+
+      if (errorMsg.amount) {
+        alert('수량을 확인해주세요.');
+      }
+
+      if (errorMsg.in_date) {
+        alert('입고일을 확인해주세요.');
+      }
+
+      if (errorMsg.date) {
+        alert('유통기한을 확인해주세요.');
+      }
 
       // const errorMsg=error.response.data;
       // if (errorMsg.date) {
@@ -161,7 +139,6 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
     values,
     submitting,
     product,
-    unit,
     location,
     error,
     setValues,
