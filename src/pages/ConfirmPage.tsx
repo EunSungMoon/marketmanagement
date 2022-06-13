@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useState, useEffect } from 'react';
-import { Link, useParams } from 'react-router-dom';
+import { Link, useParams, useLocation } from 'react-router-dom';
 import axios, { AxiosError } from 'axios';
 import { paramsIp } from '../hooks/useEdit';
 import apiSwagger from '../models/apiSwagger.json';
@@ -11,6 +11,10 @@ export default function ConfirmPage() {
   const [errors, setErrors] = useState<AxiosError>();
   const [loading, setLoading] = useState(false);
   const [lists, setLists] = useState([] as any);
+  const location = useLocation();
+
+  const btnState = location.state as { data: any };
+  const curLocation = btnState.data;
 
   const handleCompleteAxios = async () => {
     try {
@@ -80,7 +84,7 @@ export default function ConfirmPage() {
         </div>
       </div>
       <button type="button" className="button backColor-w margin-right20">
-        <Link to={`/list/${lists.map_id}/`} className="txtDeco-m">
+        <Link to={`/list/${curLocation}/`} className="txtDeco-m">
           메인으로
         </Link>
       </button>

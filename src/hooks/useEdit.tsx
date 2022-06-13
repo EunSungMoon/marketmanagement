@@ -7,10 +7,7 @@ import apiSwagger from '../models/apiSwagger.json';
 
 interface inputValues {
   location: string;
-  floor: string;
-  open: string;
-  open_date: string;
-  extra: string;
+  sold_date: string;
 }
 
 interface initValues {
@@ -20,21 +17,17 @@ interface initValues {
 
 export type paramsIp = {
   serial: string;
+  location:string
 };
 
 export default function useEdit({ initialValue, onSubmit }: initValues) {
   const [values, setValues] = useState(initialValue);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
-  const navigate = useNavigate();
-  const { serial } = useParams<paramsIp>();
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-    if (name !== undefined) {
-      setValues({ ...values, [name]: value });
-    }
-  };
+  const [lists, setLists] = useState([] as any);
+  const navigate = useNavigate();
+  const { serial, location } = useParams<paramsIp>();
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setSubmitting(true);
@@ -42,15 +35,26 @@ export default function useEdit({ initialValue, onSubmit }: initValues) {
     setValues(values);
   };
 
+  const loadEditData = async () => {
+    try {
+      const loadData = await axios.get(
+        `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/confirm/${serial}/`,
+      );
+      setLists(loadData.data);
+      console.log(loadData);
+      
+    } catch (error: any) {
+      console.log(error);
+    }
+  };
+
   const handleEditAxios = async () => {
     try {
       const loadData = await axios.put(
-        `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/update/${serial}/`,
+        `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/update/${serial}/`,
         {
-          open: values.open,
-          open_date: values.open_date,
           location: values.location,
-          floor: values.floor,
+          sold_date: values.sold_date,
         },
         {
           headers: {
@@ -58,15 +62,14 @@ export default function useEdit({ initialValue, onSubmit }: initValues) {
           },
         },
       );
-      if (loadData.status === 200) {
-        if (loadData.data.location === 1) {
-          alert('폐기가 완료되었습니다.');
-          navigate('/list/1/');
-        } 
-        // else {
-        //   navigate(`/confirm/${serial}/`, { state: { data: 'update' } });
-        // }
-      }
+      console.log(loadData);
+      // loadData.data.location의 값을 navigate주소로 
+      // if (loadData.data.location === 1) {
+      //   alert('폐기가 완료되었습니다.');
+      //   navigate('/list/1/');
+      // } else if (loadData.data.location === 2) {
+      //   navigate(`/list/${location}`);
+      // }
     } catch (error: any) {
       setErrors(error);
       alert('등록정보를 다시 확인해주세요. 오류 지속시 관리자에게 문의 바랍니다.');
@@ -75,22 +78,22 @@ export default function useEdit({ initialValue, onSubmit }: initValues) {
 
   useEffect(() => {
     if (submitting) {
-      if ((values.open === '' && values.open_date) || (values.open && values.open_date === '')) {
-        alert('개봉일자, 개봉 후 유통기한을 선택해주세요.');
-      } else {
-        handleEditAxios();
-        onSubmit(values);
-      }
+      handleEditAxios();
+      onSubmit(values);
     }
     setSubmitting(false);
   }, [submitting]);
 
+  useEffect(() => {
+    loadEditData();
+  }, []);
+
   return {
+    lists,
     values,
     errors,
     submitting,
     setValues,
-    handleChange,
     handleSubmit,
   };
 }

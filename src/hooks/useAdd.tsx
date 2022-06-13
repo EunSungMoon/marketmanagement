@@ -55,7 +55,6 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
     try {
       const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/location`);
       setLocation(loadData.data.slice(2));
-      
     } catch (error: any) {
       setError(error);
     }
@@ -85,7 +84,11 @@ export default function useAdd({ initialValue, onSubmit }: initValues) {
         },
       );
       if (loadData.status === 201) {
-        navigate(`/confirm/${values.serial}/`);
+        navigate(`/confirm/${values.serial}/`, {
+          state: {
+            data: `${loadData.data.location}`,
+          },
+        });
       }
     } catch (error: any) {
       const errorMsg = error.response.data;
