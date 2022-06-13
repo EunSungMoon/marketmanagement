@@ -211,7 +211,7 @@ export default function Board() {
 
   const loadExportFileAxios = async () => {
     try {
-      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/export/${id}/`, {
+      const loadData = await axios.get(`${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/download/${id}/`, {
         headers: {
           'Content-Type': 'application/json',
         },
