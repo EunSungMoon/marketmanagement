@@ -35,14 +35,21 @@ type paramsIp = {
   id: string;
 };
 
-function createData(name: string, unit_price: string, total: number, waste: number, unit:string, product_list: Array<productType>) {
+function createData(
+  name: string,
+  unit_price: string,
+  total: number,
+  waste: number,
+  unit: string,
+  product_list: Array<productType>,
+) {
   return {
     name,
     unit_price,
     total,
     waste,
     product_list,
-    unit
+    unit,
   };
 }
 
@@ -80,8 +87,14 @@ function Row(props: { list: ReturnType<typeof createData> }) {
         <TableCell className="white-space" component="th" scope="row">
           {list.name}
         </TableCell>
-        <TableCell>{list.total.toLocaleString()}{list.unit}</TableCell>
-        <TableCell>{list.waste}{list.unit}</TableCell>
+        <TableCell>
+          {list.total.toLocaleString()}
+          {list.unit}
+        </TableCell>
+        <TableCell>
+          {list.waste}
+          {list.unit}
+        </TableCell>
         <TableCell>{list.unit_price.toLocaleString()}원</TableCell>
         <TableCell>
           <IconButton aria-label="expand row">
@@ -121,7 +134,9 @@ function Row(props: { list: ReturnType<typeof createData> }) {
                     <TableRow key={historyRow.serial}>
                       <TableCell className="font-dg" component="th" scope="row">
                         {id !== '1' && id !== '2' ? (
-                          <Link to={`/update/${historyRow.serial}/`}>{historyRow.serial}</Link>
+                          <Link to={`/update/${historyRow.serial}/`} state={{ data: id }}>
+                            {historyRow.serial}
+                          </Link>
                         ) : (
                           // eslint-disable-next-line react/jsx-no-useless-fragment
                           <>{historyRow.serial}</>

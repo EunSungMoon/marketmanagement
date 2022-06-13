@@ -13,7 +13,7 @@ export default function ConfirmPage() {
   const [lists, setLists] = useState([] as any);
   const location = useLocation();
 
-  const btnState = location.state as { data: any };
+  const btnState = location.state as { data: string };
   const curLocation = btnState.data;
 
   const handleCompleteAxios = async () => {

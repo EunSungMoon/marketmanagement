@@ -1,7 +1,7 @@
 /* eslint-disable no-alert */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import axios from 'axios';
 import apiSwagger from '../models/apiSwagger.json';
 
@@ -17,17 +17,20 @@ interface initValues {
 
 export type paramsIp = {
   serial: string;
-  location:string
 };
 
 export default function useEdit({ initialValue, onSubmit }: initValues) {
   const [values, setValues] = useState(initialValue);
   const [errors, setErrors] = useState({});
   const [submitting, setSubmitting] = useState(false);
-
   const [lists, setLists] = useState([] as any);
+  
   const navigate = useNavigate();
-  const { serial, location } = useParams<paramsIp>();
+  const location = useLocation();
+  const { serial } = useParams<paramsIp>();
+
+  const state = location.state as { data: string };
+  const curPage = state.data;
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     setSubmitting(true);
@@ -41,10 +44,8 @@ export default function useEdit({ initialValue, onSubmit }: initValues) {
         `${apiSwagger.url}:${apiSwagger.port}/${apiSwagger.api}/board/confirm/${serial}/`,
       );
       setLists(loadData.data);
-      console.log(loadData);
-      
     } catch (error: any) {
-      console.log(error);
+      setErrors(error);
     }
   };
 
@@ -62,14 +63,12 @@ export default function useEdit({ initialValue, onSubmit }: initValues) {
           },
         },
       );
-      console.log(loadData);
-      // loadData.data.location의 값을 navigate주소로 
-      // if (loadData.data.location === 1) {
-      //   alert('폐기가 완료되었습니다.');
-      //   navigate('/list/1/');
-      // } else if (loadData.data.location === 2) {
-      //   navigate(`/list/${location}`);
-      // }
+      if (loadData.data.location === 1) {
+        alert('폐기가 완료되었습니다.');
+        navigate('/list/1/');
+      } else if (loadData.data.location === 2) {
+        navigate(`/list/${curPage}`);
+      }
     } catch (error: any) {
       setErrors(error);
       alert('등록정보를 다시 확인해주세요. 오류 지속시 관리자에게 문의 바랍니다.');
