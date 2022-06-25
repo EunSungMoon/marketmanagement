@@ -9,7 +9,7 @@ export default function Main() {
     <main id="main" className="container flex">
       <img src={logo} alt="채미왔소" />
       <div className="flex">
-        <button type="button" className='button-main backColor-1stg' onClick={() => navigate('/list/2')}>
+        <button type="button" className='button-main backColor-1stg' onClick={() => navigate('/list/3')}>
           전체 목록보기
         </button>
         <button type="button" className='button-main backColor-2ndg' onClick={() => navigate('/enroll')}>

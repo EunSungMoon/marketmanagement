@@ -1,17 +1,17 @@
 {
   "files": {
     "main.css": "/static/css/main.741e62c4.css",
-    "main.js": "/static/js/main.0814f924.js",
+    "main.js": "/static/js/main.961c6c17.js",
     "static/js/787.331f5eba.chunk.js": "/static/js/787.331f5eba.chunk.js",
     "static/media/NanumSquare_acB.ttf": "/static/media/NanumSquare_acB.ac4e2f27234150ae0de3.ttf",
     "static/media/logo.png": "/static/media/logo.c72a04d9da78038e1100.png",
     "index.html": "/index.html",
     "main.741e62c4.css.map": "/static/css/main.741e62c4.css.map",
-    "main.0814f924.js.map": "/static/js/main.0814f924.js.map",
+    "main.961c6c17.js.map": "/static/js/main.961c6c17.js.map",
     "787.331f5eba.chunk.js.map": "/static/js/787.331f5eba.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.741e62c4.css",
-    "static/js/main.0814f924.js"
+    "static/js/main.961c6c17.js"
   ]
 }
