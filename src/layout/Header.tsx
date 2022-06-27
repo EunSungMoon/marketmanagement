@@ -69,7 +69,7 @@ export default function Header() {
     <header id="header" className="backColor-w">
       <div className="container">
         <Navbar expand={false}>
-          <Container fluid>
+          <Container className="headerWrap">
             <Link to={{ pathname: `/` }}>
               <h1 className="logoArea">
                 <img src={logo} alt="로고" />

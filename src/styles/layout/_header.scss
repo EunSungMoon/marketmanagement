@@ -19,12 +19,11 @@
   }
   .formWrap {
     @include display(flex-end, center);
-    padding-left: 9px;
     .form {
       @include display(center, center);
       .inputWrap {
         position: relative;
-        width: 186px;
+        width: 230px;
         height: 34px;
         .searchInput {
           background: none;
@@ -88,6 +87,32 @@
     &:hover {
       background: $main-color;
       color: $white-color;
+    }
+  }
+}
+/**********************************************************
+
+반응형
+
+***********************************************************/
+@media (min-width: 250px) {
+  #header {
+    .formWrap {
+      padding-left: 0;
+    }
+    .headerWrap{
+      justify-content: center;
+    }
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  #header {
+    .formWrap {
+      padding-left: 9px;
+    }
+    .headerWrap{
+      justify-content: space-between;
     }
   }
 }
