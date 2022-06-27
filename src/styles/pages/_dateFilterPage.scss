@@ -2,16 +2,16 @@
   .datefilterTitle {
     color: $white-color;
     font-size: 20px;
-    margin-bottom: 0;
+
   }
   .flex-center {
     @include display(center, center);
   }
   .flex-space-between {
     @include display(space-between, center);
+    flex-flow: wrap;
   }
   .filterButton{
-    width: 135px;
     height: 35px;
     border-radius: 7px;
     border: none;
@@ -30,5 +30,44 @@
     &::placeholder {
       color: $gray-color;
     }
+  }
+  .react-datepicker-wrapper{
+
+    margin-right: 10px;
+  }
+}
+
+/**********************************************************
+
+반응형
+
+***********************************************************/
+@media (min-width: 250px) {
+  .datefilterTitle{
+    margin-bottom: 10px;
+  }
+  .react-datepicker-wrapper{
+    width: 140px !important;
+    .dday-input{
+      width: 140px;
+    }
+  }
+  .filterButton{
+    width: 50px;
+  }
+}
+
+@include media-breakpoint-up(lg) {
+  .datefilterTitle{
+    margin-bottom: 0;
+  }
+  .react-datepicker-wrapper{
+    width: 240px !important;
+    .dday-input{
+      width: 240px;
+    }
+  }
+  .filterButton{
+    width: 70px;
   }
 }
